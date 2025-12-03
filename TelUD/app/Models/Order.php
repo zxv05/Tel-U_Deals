@@ -8,15 +8,15 @@ class Order extends Model
 {
     protected $primaryKey = 'OrderID';
 
-    protected $fillable = ['fk_User'];
+
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'fk_User', 'IdUser');
+        return $this->belongsTo(User::class);
     }
 
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetail::class, 'fk_order', 'OrderID');
+        return $this->hasMany(OrderDetail::class);
     }
 }

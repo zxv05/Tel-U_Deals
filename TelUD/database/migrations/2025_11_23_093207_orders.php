@@ -11,13 +11,14 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id('OrderID');
             
-            $table->unsignedBigInteger('fk_User')->nullable();
             
             $table->timestamps();
 
-            $table->foreign('fk_User')
+            $table->foreignId('fk_User')
                   ->references('IdUser')->on('users')
-                  ->onDelete('set null')
+                  ->nullable()
+                  ->constrained()
+                  ->onDelete('cascade')
                   ->onUpdate('cascade');
         });
     }

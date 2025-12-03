@@ -13,23 +13,17 @@ return new class extends Migration
             
             $table->dateTime('Date')->useCurrent();
             
-            $table->unsignedBigInteger('fk_User')->nullable();
-            $table->unsignedBigInteger('fk_product');
-            $table->unsignedBigInteger('fk_order');
             
             $table->timestamps();
 
-            $table->foreign('fk_User')
-                  ->references('IdUser')->on('users')
-                  ->onDelete('set null')
-                  ->onUpdate('cascade');
-
-            $table->foreign('fk_product')
+            $table->foreignId('fk_product')
+                  ->constrained()
                   ->references('ProductID')->on('product')
-                  ->onDelete('restrict')
+                  ->onDelete('cascade')
                   ->onUpdate('cascade');
 
-            $table->foreign('fk_order')
+            $table->foreignId('fk_order')
+                  ->constrained()
                   ->references('OrderID')->on('orders')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');

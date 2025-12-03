@@ -1,18 +1,22 @@
 <?php
 
 namespace App\Models;
-use Spatie\Permission\Traits\HasRoles;
-use Laravel\Sanctum\HasApiTokens;
+
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use  HasFactory, Notifiable, HasRoles, HasApiTokens;
+
+    protected $primaryKey = 'IdUser';
+
 
     /**
      * The attributes that are mass assignable.
@@ -20,9 +24,10 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'Nama',
+        'Email',
+        'Password',
+        'Role',
     ];
 
     /**
@@ -31,7 +36,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        'Password',
         'remember_token',
     ];
 
@@ -44,7 +49,17 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'Password' => 'hashed',
         ];
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }
