@@ -19,7 +19,7 @@ class User extends Authenticatable
     /**
      * Primary Key custom
      */
-    protected $primaryKey = 'IdUser';
+    
 
     /**
      * Karena pakai bigIncrements
@@ -66,13 +66,5 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function products()
-    {
-        return $this->hasMany(Product::class);
-    }
-
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
+    
 }
