@@ -6,17 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            // GANTI $table->id() JADI INI:
+            $table->bigIncrements('IdUser'); // Ini Primary Key Custom lo
+            
+            $table->string('Nama');
+            $table->string('Password'); // Nanti inget di-hash ya
+            $table->string('Email')->unique();
+            $table->enum('Role', ['admin', 'user'])->default('user');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -29,7 +29,11 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            
+            // Perhatikan foreign id ini, karena lo ganti jadi IdUser
+            // Sebaiknya pake cara manual biar aman:
+            $table->unsignedBigInteger('user_id')->nullable()->index();
+            
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
@@ -37,13 +41,10 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };
