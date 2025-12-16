@@ -4,15 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Product extends Model
 {
-    protected $primaryKey = 'OrderID';
 
-
+    protected $primaryKey = 'ProductID';
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
     }
 
     public function orderDetails()
