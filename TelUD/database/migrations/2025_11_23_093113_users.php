@@ -8,14 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id('IdUser'); 
-            $table->string('Nama', 191);
-            $table->string('Password', 191);
-            $table->string('Email', 191)->unique();
+        Schema::table('users', function (Blueprint $table) {
+            
             $table->enum('Role', ['user', 'admin'])->default('user');
             
-            $table->timestamps();
         });
     }
 

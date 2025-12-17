@@ -12,7 +12,7 @@ class Order extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'fk_User', 'IdUser');
+        return $this->belongsTo(User::class, 'fk_User', 'id');
     }
 
     public function orderDetails()

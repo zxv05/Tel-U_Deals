@@ -10,7 +10,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $primaryKey = 'IdUser';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'Nama',
@@ -29,11 +29,11 @@ class User extends Authenticatable
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'fk_user', 'IdUser');
+        return $this->hasMany(Product::class, 'fk_user', 'id');
     }
 
     public function orders()
     {
-        return $this->hasMany(Order::class, 'fk_User', 'IdUser');
+        return $this->hasMany(Order::class, 'fk_User', 'id');
     }
 }

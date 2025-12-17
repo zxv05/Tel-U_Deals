@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('fk_User')
-                  ->references('IdUser')->on('users')
+                  ->references('id')->on('users')
                   ->onDelete('set null')
                   ->onUpdate('cascade');
 
