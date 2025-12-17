@@ -1,33 +1,51 @@
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900">
-                
-                {{-- BAGIAN INI CUMA MUNCUL KALAU YANG LOGIN ADMIN --}}
-                @role('admin')
-                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                        <h3 class="font-bold text-lg">🔥 MODE GOD (ADMIN)</h3>
-                        <p>Bos Admin bebas ngapain aja di sini.</p>
-                        <div class="mt-2">
-                            <a href="/admin/test" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                                Tes Masuk Ruang Rahasia
-                            </a>
-                        </div>
-                    </div>
-                @endrole
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
-                {{-- BAGIAN INI CUMA MUNCUL KALAU YANG LOGIN USER BIASA --}}
-                @role('user')
-                    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-                        <h3 class="font-bold text-lg">👋 Halo User Biasa!</h3>
-                        <p>Selamat berbelanja santai yaa...</p>
-                    </div>
-                @endrole
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
 
-                {{-- INI MUNCUL BUAT SEMUA ORANG --}}
-                <p class="mt-4">Status Login: <strong>{{ Auth::user()->name }}</strong></p>
-                
+                    <!-- Sambutan User -->
+                    <p class="mb-4">
+                        Selamat datang,
+                        <strong>{{ Auth::user()->Nama }}</strong>
+                    </p>
+
+                    <a href="{{ route('deals.index') }}"
+                       class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-6">
+                        Lihat Deals
+                    </a>
+
+                    <hr class="my-6">
+
+                    <!-- Deals Terbaru -->
+                    <h3 class="text-lg font-bold mb-4">Deals Terbaru</h3>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        @foreach($deals as $deal)
+                            <div class="border p-4 rounded">
+                                <h4 class="font-bold">{{ $deal->judul }}</h4>
+                                <p>Rp {{ number_format($deal->harga) }}</p>
+
+                                <!-- Tombol Beli -->
+                                <form action="{{ route('deals.buy', $deal->id) }}" method="POST" class="mt-2">
+                                    @csrf
+                                    <button type="submit" 
+                                            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                                        Beli
+                                    </button>
+                                </form>
+                            </div>
+                        @endforeach
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
+</x-app-layout>

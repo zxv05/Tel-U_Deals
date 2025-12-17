@@ -27,24 +27,28 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+// ... baris import di atas ...
+public function store(Request $request): RedirectResponse
+{
+    // 1. VALIDASI (Gunakan nama input dari Form HTML -> Huruf Kecil)
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'], // Tetap 'name'
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class], // Tetap 'email'
+        'password' => ['required', 'confirmed', Rules\Password::defaults()], // Tetap 'password'
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    // 2. SIMPAN KE DB (Gunakan nama kolom Database -> Huruf Besar)
+    $user = User::create([
+        'Nama' => $request->name,      // Kolom 'Nama' diisi input 'name'
+        'Email' => $request->email,    // Kolom 'Email' diisi input 'email'
+        'Password' => Hash::make($request->password), // Kolom 'Password'
+        'Role' => 'user',              // Default role
+    ]);
 
-        event(new Registered($user));
+    event(new Registered($user));
 
-        Auth::login($user);
+    Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
-    }
+    return redirect(route('dashboard', absolute: false));
+}
 }

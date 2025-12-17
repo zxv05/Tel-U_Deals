@@ -20,7 +20,7 @@ class Product extends Model
     // Relasi ke User
     public function seller()
     {
-        return $this->belongsTo(User::class, 'fk_user', 'id');
+        return $this->belongsTo(User::class, 'fk_user', 'IdUser');
     }
 
     // Relasi ke Kategori

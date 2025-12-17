@@ -5,29 +5,34 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class RoleSeeder extends Seeder
 {
     public function run(): void
     {
+        // Reset cache permission biar gak error
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
+        // 1. Buat Role Spatie
         $roleAdmin = Role::firstOrCreate(['name' => 'admin']);
         $roleUser = Role::firstOrCreate(['name' => 'user']);
 
-        // Admin
+        // 2. Buat User ADMIN
         $admin = User::create([
-            'name' => 'Admin Tel-U',
-            'email' => 'admin@telu.com',
-            'password' => bcrypt('password'), // <--- WAJIB PAKE BCRYPT
+            'Nama' => 'Admin Tel-U',
+            'Email' => 'admin@telu.com',
+            'Password' => Hash::make('password'),
+            'Role' => 'admin', // Sesuai enum baru
         ]);
         $admin->assignRole($roleAdmin);
 
-        // User Bul
+        // 3. Buat User BIASA (Si Bul)
         $user = User::create([
-            'name' => 'Bul Mahasiswa',
-            'email' => 'bul@telu.com',
-            'password' => bcrypt('bul123'), // <--- WAJIB PAKE BCRYPT
+            'Nama' => 'Bul Mahasiswa',
+            'Email' => 'bul@telu.com',
+            'Password' => Hash::make('bul123'),
+            'Role' => 'user', // <--- NAH INI SEKARANG UDAH BISA 'user'
         ]);
         $user->assignRole($roleUser);
     }

@@ -1,50 +1,71 @@
 <?php
 
 namespace App\Models;
-use Spatie\Permission\Traits\HasRoles;
-use Laravel\Sanctum\HasApiTokens;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+use Laravel\Sanctum\HasApiTokens;
+Use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use  HasFactory, Notifiable, HasRoles, HasApiTokens;
+
+    protected $primaryKey = 'IdUser';
+
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Primary Key custom
+     */
+    
+
+    /**
+     * Karena pakai bigIncrements
+     */
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+    /**
+     * KOLOM YANG BOLEH DI-INSERT (INI PALING PENTING)
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'Nama',
+        'Email',
+        'Password',
+        'Role',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Sembunyikan password saat serialize
      */
     protected $hidden = [
-        'password',
+        'Password',
         'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Cast tipe data
      */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'Password' => 'hashed',
         ];
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    
 }
