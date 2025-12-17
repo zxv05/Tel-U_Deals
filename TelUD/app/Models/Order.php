@@ -8,6 +8,17 @@ class Order extends Model
 {
     protected $primaryKey = 'OrderID';
 
+    protected $fillable = [
+        'order_label',
+        'user_id',
+        'total_price',
+        'status',
+        'payment_status'
+    ];
+
+
+
+
 
 
     public function user()
@@ -19,4 +30,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
 }

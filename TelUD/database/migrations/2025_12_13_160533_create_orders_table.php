@@ -14,7 +14,12 @@ return new class extends Migration
     Schema::create('orders', function (Blueprint $table) {
         $table->bigIncrements('OrderID');
         $table->unsignedBigInteger('fk_User'); // Pembeli
+        $table->string('order_label', 32)->unique();
         $table->timestamps();
+        $table->decimal('total_price', 10, 2); // Total harga dari order
+        $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
+        $table->enum('payment_status', ['unpaid', 'paid', 'failed'])->default('unpaid');
+
 
         $table->foreign('fk_User')->references('IdUser')->on('users')->onDelete('cascade');
     });
