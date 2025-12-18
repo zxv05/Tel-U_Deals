@@ -20,19 +20,19 @@ class RoleSeeder extends Seeder
 
         // 2. Buat User ADMIN
         $admin = User::create([
-            'Nama' => 'Admin Tel-U',
-            'Email' => 'admin@telu.com',
-            'Password' => Hash::make('password'),
-            'Role' => 'admin', // Sesuai enum baru
+            'nama' => 'Admin Tel-U',
+            'email' => 'admin@telu.com',
+            'password' => Hash::make('password'),
+            'role' => 'admin', // Sesuai enum baru
         ]);
         $admin->assignRole($roleAdmin);
 
         // 3. Buat User BIASA (Si Bul)
         $user = User::create([
-            'Nama' => 'Bul Mahasiswa',
-            'Email' => 'bul@telu.com',
-            'Password' => Hash::make('bul123'),
-            'Role' => 'user', // <--- NAH INI SEKARANG UDAH BISA 'user'
+            'nama' => 'Bul Mahasiswa',
+            'email' => 'bul@telu.com',
+            'password' => Hash::make('bul123'),
+            'role' => 'user', // <--- NAH INI SEKARANG UDAH BISA 'user'
         ]);
         $user->assignRole($roleUser);
     }

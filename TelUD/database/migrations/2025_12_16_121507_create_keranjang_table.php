@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('keranjang', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('fk_user');
-            $table->unsignedBigInteger('fk_product'); 
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('product_id'); 
             $table->integer('quantity')->default(1); 
             $table->decimal('total_price', 10, 2); 
             $table->timestamps(); 
 
-            $table->foreign('fk_User')->references('IdUser')->on('users');
-            $table->foreign('fk_product')->references('ProductID')->on('product');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 
         });
     }

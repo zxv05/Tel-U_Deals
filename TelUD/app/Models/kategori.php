@@ -8,9 +8,9 @@ class Kategori extends Model
 {
     protected $table = 'kategori';
     
-    protected $primaryKey = 'KategoriID';
+    protected $primaryKey = 'id';
 
-    protected $fillable = ['NamaKategori'];
+    protected $fillable = ['nama_kategori'];
 
 
     public function products()

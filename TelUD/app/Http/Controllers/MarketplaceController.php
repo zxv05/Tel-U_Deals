@@ -30,18 +30,18 @@ class MarketplaceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'NamaBarang' => 'required',
-            'HargaProduct' => 'required|numeric',
-            'fk_kategori' => 'required',
-            'ProductDetail' => 'required'
+            'nama_barang' => 'required',
+            'harga_product' => 'required|numeric',
+            'kategori_id' => 'required',
+            'product_detail' => 'required'
         ]);
 
         Product::create([
-            'fk_user' => Auth::id(), // ID User yang login
-            'NamaBarang' => $request->NamaBarang,
-            'fk_kategori' => $request->fk_kategori,
-            'HargaProduct' => $request->HargaProduct,
-            'ProductDetail' => $request->ProductDetail,
+            'user_id' => Auth::id(), // ID User yang login
+            'nama_barang' => $request->NamaBarang,
+            'kategori_id' => $request->fk_kategori,
+            'harga_product' => $request->HargaProduct,
+            'product_detail' => $request->ProductDetail,
         ]);
 
         return redirect()->route('marketplace.index')->with('success', 'Barang berhasil dijual!');
@@ -57,15 +57,15 @@ class MarketplaceController extends Controller
         DB::transaction(function () use ($product) {
             // A. Buat Order Header
             $order = Order::create([
-                'fk_User' => Auth::id() // Pembeli
+                'user_id' => Auth::id() // Pembeli
             ]);
 
             // B. Buat Detail Order
             OrderDetail::create([
-                'fk_order' => $order->OrderID,
-                'fk_product' => $product->ProductID,
-                'fk_User' => Auth::id(),
-                'Date' => now(),
+                'order_id' => $order->OrderID,
+                'product_id' => $product->ProductID,
+                'user_id' => Auth::id(),
+                'date' => now(),
             ]);
         });
 

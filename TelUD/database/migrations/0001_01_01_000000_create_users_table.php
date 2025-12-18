@@ -10,13 +10,13 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             // GANTI $table->id() JADI INI:
-            $table->bigIncrements('IdUser'); // Ini Primary Key Custom lo
+            $table->bigIncrements('id'); // Ini Primary Key Custom lo
             
-            $table->string('Nama');
-            $table->string('Password'); // Nanti inget di-hash ya
-            $table->string('Email')->unique();
-            $table->enum('Role', ['admin', 'user'])->default('user');
+            $table->string('nama');
+            $table->string('email')->unique();
+            $table->enum('role', ['admin', 'user'])->default('user');
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('password'); // Nanti inget di-hash ya
             $table->rememberToken();
             $table->timestamps();
         });

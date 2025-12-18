@@ -12,16 +12,13 @@ return new class extends Migration
     public function up()
 {
     Schema::create('order_details', function (Blueprint $table) {
-        $table->bigIncrements('OrderDetailsID');
-        $table->dateTime('Date');
-        $table->unsignedBigInteger('fk_User'); // User (sesuai ERD)
-        $table->unsignedBigInteger('fk_product');
-        $table->unsignedBigInteger('fk_order');
+        $table->bigIncrements('id');
+        $table->unsignedBigInteger('product_id');
+        $table->unsignedBigInteger('order_id');
         $table->timestamps();
-
-        $table->foreign('fk_User')->references('IdUser')->on('users');
-        $table->foreign('fk_product')->references('ProductID')->on('product');
-        $table->foreign('fk_order')->references('OrderID')->on('orders')->onDelete('cascade');
+        $table->integer('quantity');
+        $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+        $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
     });
 }
 

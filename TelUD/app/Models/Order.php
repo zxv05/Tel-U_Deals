@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $primaryKey = 'OrderID';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'order_label',
+        'order_id',
         'user_id',
         'total_price',
         'status',

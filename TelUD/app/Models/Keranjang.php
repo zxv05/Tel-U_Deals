@@ -9,7 +9,7 @@ class Keranjang extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'fk_user',
+        'user_id',
         'product_id',
         'quantity',
         'total_price',

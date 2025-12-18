@@ -8,13 +8,14 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 Use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use  HasFactory, Notifiable, HasRoles, HasApiTokens;
 
-    protected $primaryKey = 'IdUser';
+    protected $primaryKey = 'id';
 
 
     /**
@@ -32,17 +33,17 @@ class User extends Authenticatable
      * KOLOM YANG BOLEH DI-INSERT (INI PALING PENTING)
      */
     protected $fillable = [
-        'Nama',
-        'Email',
-        'Password',
-        'Role',
+        'nama',
+        'email',
+        'password',
+        'role',
     ];
 
     /**
      * Sembunyikan password saat serialize
      */
     protected $hidden = [
-        'Password',
+        'password',
         'remember_token',
     ];
 

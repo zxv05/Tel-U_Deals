@@ -10,7 +10,7 @@
         <h1 class="mb-4">Keranjang Belanja Anda</h1>
 
         <!-- Cek jika keranjang kosong -->
-        @if($cartItems->isEmpty())
+        @if($KeranjangItems->isEmpty())
             <div class="alert alert-info text-center">
                 Keranjang belanja Anda kosong. Mulailah berbelanja sekarang!
             </div>
@@ -27,12 +27,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($cartItems as $item)
+                    @foreach($KeranjangItems as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->product->name }}</td>
                             <td>{{ $item->quantity }}</td>
-                            <td>Rp{{ number_format($item->product->price, 2) }}</td>
+                            <td>Rp{{ number_format($item->product->harga_product, 2) }}</td>
                             <td>Rp{{ number_format($item->total_price, 2) }}</td>
                             <td class="d-flex">
                                 <!-- Update kuantitas -->
@@ -59,8 +59,8 @@
             <!-- Ringkasan Keranjang -->
             <div class="mt-4">
                 <h4>Ringkasan Keranjang</h4>
-                <p><strong>Total Item:</strong> {{ $cartCount }}</p>
-                <p><strong>Total Harga:</strong> Rp{{ number_format($cartItems->sum('total_price'), 2) }}</p>
+                <p><strong>Total Item:</strong> {{ $KeranjangCount }}</p>
+                <p><strong>Total Harga:</strong> Rp{{ number_format($KeranjangItems->sum('total_price'), 2) }}</p>
                 <form action="{{ route('keranjang.checkout') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-primary btn-lg w-100">Lanjutkan ke Pembayaran</button>

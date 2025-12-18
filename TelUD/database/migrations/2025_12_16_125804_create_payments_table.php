@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
         $table->id();
         $table->unsignedBigInteger('order_id');
         $table->string('snap_token')->nullable();
@@ -20,7 +20,7 @@ return new class extends Migration
         $table->dateTime('paid_at')->nullable();
         $table->timestamps();
         // Foreign key ke tabel orders
-        $table->foreign('order_id')->references('OrderID')->on('orders');
+        $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment');
+        Schema::dropIfExists('payments');
     }
 };

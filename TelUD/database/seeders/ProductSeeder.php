@@ -15,27 +15,27 @@ class ProductSeeder extends Seeder
     {
         // Membuat data dummy produk
         Product::create([
-            'fk_user' => 1,
-            'NamaBarang' => 'Produk 1',
-            'fk_kategori' => 1,
-            'HargaProduct' => 100000,
-            'ProductDetail' => 'Detail Produk'
+            'user_id' => 2,
+            'nama_barang' => 'Produk 1',
+            'kategori_id' => 1,
+            'harga_product' => 100000,
+            'product_detail' => 'Detail Produk'
         ]);
 
         Product::create([
-            'fk_user' => 1,
-            'NamaBarang' => 'Produk 2',
-            'fk_kategori' => 2,
-            'HargaProduct' => 150000,
-            'ProductDetail' => 'Detail Produk'
+            'user_id' => 2,
+            'nama_barang' => 'Produk 2',
+            'kategori_id' => 2,
+            'harga_product' => 150000,
+            'product_detail' => 'Detail Produk'
         ]);
 
         Product::create([
-            'fk_user' => 1,
-            'NamaBarang' => 'Produk 3',
-            'fk_kategori' => 3,
-            'HargaProduct' => 200000,
-            'ProductDetail' => 'Detail Produk'
+            'user_id' => 2,
+            'nama_barang' => 'Produk 3',
+            'kategori_id' => 3,
+            'harga_product' => 200000,
+            'product_detail' => 'Detail Produk'
         ]);
 
     }

@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::create('product', function (Blueprint $table) {
-        $table->bigIncrements('ProductID');
-        $table->unsignedBigInteger('fk_user');
-        $table->string('NamaBarang');
-        $table->unsignedBigInteger('fk_kategori');
-        $table->decimal('HargaProduct', 10, 2);
-        $table->text('ProductDetail');
+    Schema::create('products', function (Blueprint $table) {
+        $table->bigIncrements('id');
+        $table->unsignedBigInteger('user_id');
+        $table->string('nama_barang');
+        $table->unsignedBigInteger('kategori_id');
+        $table->decimal('harga_product', 10, 2);
+        $table->text('product_detail');
         $table->timestamps();
 
         // Foreign Keys
-        $table->foreign('fk_user')->references('IdUser')->on('users')->onDelete('cascade');
-        $table->foreign('fk_kategori')->references('KategoriID')->on('kategori')->onDelete('cascade');
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        $table->foreign('kategori_id')->references('id')->on('kategori')->onDelete('cascade');
     });
 }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product');
+        Schema::dropIfExists('products');
     }
 };

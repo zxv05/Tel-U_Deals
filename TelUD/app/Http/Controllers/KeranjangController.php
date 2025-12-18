@@ -15,7 +15,7 @@ class KeranjangController extends Controller
         // Hitung jumlah item di Keranjang
         $KeranjangCount = $KeranjangItems->sum('quantity');
 
-        return view('Keranjang.index', compact('KeranjangItems', 'KeranjangCount'));
+        return view('keranjang.index', compact('KeranjangItems', 'KeranjangCount'));
     }
 
 public function checkout()
@@ -25,7 +25,7 @@ public function checkout()
 
         // Pastikan ada item di Keranjang
         if ($KeranjangItems->isEmpty()) {
-            return redirect()->route('Keranjang.index')->with('error', 'Your Keranjang is empty.');
+            return redirect()->route('keranjang.index')->with('error', 'Your Keranjang is empty.');
         }
 
         // Hitung total harga pesanan
@@ -54,7 +54,7 @@ public function checkout()
         // Hapus semua item di Keranjang setelah checkout
         Keranjang::where('user_id', Auth::id())->delete();
 
-        return redirect()->route('Keranjang.index')->with('success', 'Your order has been placed successfully!');
+        return redirect()->route('keranjang.index')->with('success', 'Your order has been placed successfully!');
     }
 
     public function store(Request $request)

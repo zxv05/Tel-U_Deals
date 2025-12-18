@@ -24,7 +24,7 @@
                                 @forelse($orders as $order)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>#{{ $order->order_id }}</td>
+                                        <td>#{{ $order->id }}</td>
                                         <td>Rp {{ number_format($order->total_price, 2, ',', '.') }}</td>
                                         <td>{{ $order->status }}</td>
                                         <td>
