@@ -9,23 +9,23 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $table = 'product'; // Nama tabel singular
-    protected $primaryKey = 'ProductID'; // PK Custom
+    protected $table = 'products'; // Nama tabel singular
+    protected $primaryKey = 'id'; // PK Custom
     
     // Biar bisa mass assignment
     protected $fillable = [
-        'fk_user', 'NamaBarang', 'fk_kategori', 'HargaProduct', 'ProductDetail'
+        'user_id', 'nama_barang', 'kategori_id', 'harga_product', 'product_detail'
     ];
 
     // Relasi ke User
     public function seller()
     {
-        return $this->belongsTo(User::class, 'fk_user', 'IdUser');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     // Relasi ke Kategori
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class, 'fk_kategori', 'KategoriID');
+        return $this->belongsTo(Kategori::class, 'kategori_id', 'id');
     }
 }
