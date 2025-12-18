@@ -6,7 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $primaryKey = 'OrderID';
+    protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'order_id',
+        'user_id',
+        'total_price',
+        'status',
+        'payment_status'
+    ];
+
+
+
 
 
 
@@ -19,4 +30,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
 }

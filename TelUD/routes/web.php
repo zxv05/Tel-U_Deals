@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DealController;
+use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Models\Deal;
 use Illuminate\Support\Facades\Route;
 
@@ -60,4 +64,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/deals/create', [DealController::class, 'create'])->name('admin.deals.create');
         Route::post('/admin/deals', [DealController::class, 'store'])->name('admin.deals.store');
     });
+
+    Route::post('keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
+    Route::resource('keranjang', KeranjangController::class);
+
+    Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback']);
+
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
 });

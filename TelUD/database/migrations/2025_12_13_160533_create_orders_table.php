@@ -12,11 +12,16 @@ return new class extends Migration
     public function up()
 {
     Schema::create('orders', function (Blueprint $table) {
-        $table->bigIncrements('OrderID');
-        $table->unsignedBigInteger('fk_User'); // Pembeli
+        $table->bigIncrements('id');
+        $table->unsignedBigInteger('user_id'); // Pembeli
+        $table->string('order_id', 32)->unique();
         $table->timestamps();
+        $table->decimal('total_price', 10, 2); // Total harga dari order
+        $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
+        $table->enum('payment_status', ['unpaid', 'paid', 'failed'])->default('unpaid');
 
-        $table->foreign('fk_User')->references('IdUser')->on('users')->onDelete('cascade');
+
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
     });
 }
 

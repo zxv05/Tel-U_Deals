@@ -9,24 +9,27 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::create('order_details', function (Blueprint $table) {
-        $table->bigIncrements('id');
-        $table->unsignedBigInteger('product_id');
+    public function up(): void
+    {
+        Schema::create('payments', function (Blueprint $table) {
+        $table->id();
         $table->unsignedBigInteger('order_id');
+        $table->string('snap_token')->nullable();
+        $table->string('status', 32)->default('pending');
+        $table->dateTime('expired_at')->nullable();
+        $table->dateTime('paid_at')->nullable();
         $table->timestamps();
-        $table->integer('quantity');
-        $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+        // Foreign key ke tabel orders
         $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-    });
-}
+
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('payments');
     }
 };

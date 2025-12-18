@@ -9,27 +9,22 @@ class OrderDetail extends Model
 {
     protected $table = 'order_details';
     
-    protected $primaryKey = 'OrderDetailsID';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'Date',
-        'fk_User',
-        'fk_product',
-        'fk_order'
+        'product_id',
+        'quantity',
+        'order_id'
     ];
 
     public function order()
     {
-        return $this->belongsTo(Order::class, 'fk_order', 'OrderID');
+        return $this->belongsTo(Order::class, 'order_id', 'id');
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'fk_product', 'ProductID');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'fk_User', 'id');
-    }
 }
