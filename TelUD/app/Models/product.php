@@ -9,8 +9,8 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $table = 'products'; // Nama tabel singular
-    protected $primaryKey = 'id'; // PK Custom
+    protected $table = 'product'; // Nama tabel singular
+    protected $primaryKey = 'ProductID'; // PK Custom
     
     // Biar bisa mass assignment
     protected $fillable = [
@@ -20,12 +20,12 @@ class Product extends Model
     // Relasi ke User
     public function seller()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'fk_user', 'IdUser');
     }
 
     // Relasi ke Kategori
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class, 'kategori_id', 'id');
+        return $this->belongsTo(Kategori::class, 'fk_kategori', 'KategoriID');
     }
 }
