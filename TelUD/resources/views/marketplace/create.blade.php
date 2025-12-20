@@ -13,23 +13,27 @@
                     @csrf
                     <div class="mb-3">
                         <label>Nama Barang</label>
-                        <input type="text" name="NamaBarang" class="form-control" required>
+                        <input type="text" name="nama_barang" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label>Kategori</label>
-                        <select name="fk_kategori" class="form-control">
+                        <select name="kategori_id" class="form-control">
                             @foreach($kategoris as $k)
-                                <option value="{{ $k->KategoriID }}">{{ $k->NamaKategori }}</option>
+                                <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
                         <label>Harga (Rp)</label>
-                        <input type="number" name="HargaProduct" class="form-control" required>
+                        <input type="number" name="harga_product" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Stok</label>
+                        <input type="number" name="stok" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label>Detail Produk</label>
-                        <textarea name="ProductDetail" class="form-control" rows="3"></textarea>
+                        <textarea name="product_detail" class="form-control" rows="3"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Pasang Iklan</button>
                 </form>

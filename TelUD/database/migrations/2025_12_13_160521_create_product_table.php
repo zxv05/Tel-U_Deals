@@ -18,6 +18,7 @@ return new class extends Migration
         $table->unsignedBigInteger('kategori_id');
         $table->decimal('harga_product', 10, 2);
         $table->text('product_detail');
+        $table->integer('stok');
         $table->timestamps();
 
         // Foreign Keys

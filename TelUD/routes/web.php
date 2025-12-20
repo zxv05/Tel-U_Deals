@@ -66,8 +66,9 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::post('keranjang/checkout', [KeranjangController::class, 'checkout'])->name('keranjang.checkout');
+    Route::get('keranjang',[KeranjangController::class, 'index'])->name('keranjang.index');
     Route::resource('keranjang', KeranjangController::class);
-
+    Route::delete('keranjang',[KeranjangController::class, 'destroy'])->name('keranjang.destroy');
     Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback']);
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

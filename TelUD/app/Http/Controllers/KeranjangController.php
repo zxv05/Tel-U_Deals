@@ -54,7 +54,7 @@ public function checkout()
         // Hapus semua item di Keranjang setelah checkout
         Keranjang::where('user_id', Auth::id())->delete();
 
-        return redirect()->route('keranjang.index')->with('success', 'Your order has been placed successfully!');
+        return redirect()->route('keranjang')->with('success', 'Your order has been placed successfully!');
     }
 
     public function store(Request $request)
@@ -73,11 +73,11 @@ public function checkout()
             ],
             [
                 'quantity' => $request->input('quantity', 1), 
-                'total_price' => Product::find($request->product_id)->price * $request->input('quantity', 1),
+                'total_price' => Product::find($request->product_id)->harga_product * $request->input('quantity', 1),
             ]
         );
 
-        return redirect()->route('Keranjang.index')->with('success', 'Product added to Keranjang!');
+        return redirect()->route('keranjang.index')->with('success', 'Product added to Keranjang!');
     }
 
     public function update(Request $request, $id)
@@ -89,10 +89,10 @@ public function checkout()
         // Update item di Keranjang
         $KeranjangItem = Keranjang::findOrFail($id);
         $KeranjangItem->quantity = $request->quantity;
-        $KeranjangItem->total_price = $KeranjangItem->product->price * $request->quantity;
+        $KeranjangItem->total_price = $KeranjangItem->product->harga_product * $request->quantity;
         $KeranjangItem->save();
 
-        return redirect()->route('Keranjang.index')->with('success', 'Keranjang updated successfully!');
+        return redirect()->route('keranjang.index')->with('success', 'Keranjang updated successfully!');
     }
 
     public function destroy($id)
@@ -100,7 +100,7 @@ public function checkout()
         $KeranjangItem = Keranjang::findOrFail($id);
         $KeranjangItem->delete();
 
-        return redirect()->route('Keranjang.index')->with('success', 'Item removed from Keranjang');
+        return redirect()->route('keranjang.index')->with('success', 'Item removed from Keranjang');
     }
 }
 

@@ -14,7 +14,7 @@ class Product extends Model
     
     // Biar bisa mass assignment
     protected $fillable = [
-        'user_id', 'nama_barang', 'kategori_id', 'harga_product', 'product_detail'
+        'user_id', 'nama_barang', 'kategori_id', 'harga_product', 'product_detail','stok'
     ];
 
     // Relasi ke User

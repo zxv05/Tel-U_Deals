@@ -33,18 +33,20 @@ class MarketplaceController extends Controller
             'nama_barang' => 'required',
             'harga_product' => 'required|numeric',
             'kategori_id' => 'required',
-            'product_detail' => 'required'
+            'product_detail' => 'required',
+            'stok' => 'required|min:0'
         ]);
 
         Product::create([
             'user_id' => Auth::id(), // ID User yang login
-            'nama_barang' => $request->NamaBarang,
-            'kategori_id' => $request->fk_kategori,
-            'harga_product' => $request->HargaProduct,
-            'product_detail' => $request->ProductDetail,
+            'nama_barang' => $request->nama_barang,
+            'kategori_id' => $request->kategori_id,
+            'harga_product' => $request->harga_product,
+            'product_detail' => $request->product_detail,
+            'stok' => $request->kuantitas
         ]);
 
-        return redirect()->route('marketplace.index')->with('success', 'Barang berhasil dijual!');
+        return redirect()->route('marketplace.index')->with('success', 'Barang berhasil diupload ke Marketplace!');
     }
 
     // 4. Logic Beli Barang (Checkout Simple)
@@ -70,5 +72,8 @@ class MarketplaceController extends Controller
         });
 
         return redirect()->back()->with('success', 'Berhasil dibeli! Cek riwayat pesanan.');
+    }
+    public function addToCart($id_barang){
+
     }
 }

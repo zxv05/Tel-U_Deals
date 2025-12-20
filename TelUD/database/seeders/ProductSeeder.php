@@ -19,23 +19,26 @@ class ProductSeeder extends Seeder
             'nama_barang' => 'Produk 1',
             'kategori_id' => 1,
             'harga_product' => 100000,
-            'product_detail' => 'Detail Produk'
+            'product_detail' => 'Detail Produk',
+            'stok' => 5
         ]);
 
         Product::create([
-            'user_id' => 2,
+            'user_id' => 4,
             'nama_barang' => 'Produk 2',
             'kategori_id' => 2,
             'harga_product' => 150000,
-            'product_detail' => 'Detail Produk'
+            'product_detail' => 'Detail Produk',
+            'stok' => 9
         ]);
 
         Product::create([
-            'user_id' => 2,
+            'user_id' => 3,
             'nama_barang' => 'Produk 3',
             'kategori_id' => 3,
             'harga_product' => 200000,
-            'product_detail' => 'Detail Produk'
+            'product_detail' => 'Detail Produk',
+            'stok' => 2
         ]);
 
     }

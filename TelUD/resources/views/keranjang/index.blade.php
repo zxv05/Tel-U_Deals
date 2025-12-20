@@ -1,12 +1,15 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="text-center">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Keranjang Belanja') }}
         </h2>
     </x-slot>
 
-    <div class="container mt-5">
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
         <h1 class="mb-4">Keranjang Belanja Anda</h1>
 
         <!-- Cek jika keranjang kosong -->
@@ -30,7 +33,7 @@
                     @foreach($KeranjangItems as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->product->name }}</td>
+                            <td>{{ $item->product->nama_barang }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>Rp{{ number_format($item->product->harga_product, 2) }}</td>
                             <td>Rp{{ number_format($item->total_price, 2) }}</td>

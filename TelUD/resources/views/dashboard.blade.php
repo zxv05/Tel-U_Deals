@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
@@ -13,11 +13,11 @@
                     <!-- Sambutan User -->
                     <p class="mb-4">
                         Selamat datang,
-                        <strong>{{ Auth::user()->Nama }}</strong>
+                        <strong>{{ Auth::user()->nama }}</strong>
                     </p>
 
                     <a href="{{ route('deals.index') }}"
-                       class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-6">
+                       class="inline-block bg-rose-600 hover:bg-rose-900 text-white px-4 py-2 rounded mb-6">
                         Lihat Deals
                     </a>
 

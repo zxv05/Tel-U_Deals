@@ -39,10 +39,10 @@ public function store(Request $request): RedirectResponse
 
     // 2. SIMPAN KE DB (Gunakan nama kolom Database -> Huruf Besar)
     $user = User::create([
-        'Nama' => $request->name,      // Kolom 'Nama' diisi input 'name'
-        'Email' => $request->email,    // Kolom 'Email' diisi input 'email'
-        'Password' => Hash::make($request->password), // Kolom 'Password'
-        'Role' => 'user',              // Default role
+        'nama' => $request->name,      // Kolom 'Nama' diisi input 'name'
+        'email' => $request->email,    // Kolom 'Email' diisi input 'email'
+        'password' => Hash::make($request->password), // Kolom 'Password'
+        'role' => 'user',              // Default role
     ]);
 
     event(new Registered($user));
