@@ -65,8 +65,10 @@ public function checkout()
             'quantity' => 'required|integer|min:1',
         ]);
 
+        
         // Tambahkan ke Keranjang
         $Keranjang = Keranjang::updateOrCreate(
+            
             [
                 'user_id' => Auth::id(),
                 'product_id' => $request->product_id,
@@ -75,7 +77,13 @@ public function checkout()
                 'quantity' => $request->input('quantity', 1), 
                 'total_price' => Product::find($request->product_id)->harga_product * $request->input('quantity', 1),
             ]
+            
         );
+
+        $product = Product::find($request->product_id);
+        $product->stok = $product->stok - $request->quantity;
+        $product->save();
+
 
         return redirect()->route('keranjang.index')->with('success', 'Product added to Keranjang!');
     }
@@ -86,11 +94,17 @@ public function checkout()
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
+
+        
         // Update item di Keranjang
         $KeranjangItem = Keranjang::findOrFail($id);
+        $difference = $KeranjangItem->quantity - $request->quantity;
         $KeranjangItem->quantity = $request->quantity;
         $KeranjangItem->total_price = $KeranjangItem->product->harga_product * $request->quantity;
         $KeranjangItem->save();
+        $product = Product::findOrFail($KeranjangItem->product_id);
+        $product->stok = $product->stok + $difference;
+        $product->save();
 
         return redirect()->route('keranjang.index')->with('success', 'Keranjang updated successfully!');
     }
@@ -98,6 +112,9 @@ public function checkout()
     public function destroy($id)
     {
         $KeranjangItem = Keranjang::findOrFail($id);
+        $product = Product::findOrFail($KeranjangItem->product_id);
+        $product->stok = $product->stok + $KeranjangItem->quantity;
+        $product->save();
         $KeranjangItem->delete();
 
         return redirect()->route('keranjang.index')->with('success', 'Item removed from Keranjang');

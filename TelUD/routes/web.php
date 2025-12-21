@@ -18,9 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Halaman welcome (public)
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 // Auth routes (register, login, dll)
 require __DIR__.'/auth.php';
@@ -29,6 +27,10 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth'])->group(function () {
 
     // Dashboard
+    Route::get('/', function () {
+        $deals = Deal::all();  // Ambil semua deals dari database
+        return view('dashboard', compact('deals'));
+    })->name('dashboard');
     Route::get('/dashboard', function () {
         $deals = Deal::all();  // Ambil semua deals dari database
         return view('dashboard', compact('deals'));

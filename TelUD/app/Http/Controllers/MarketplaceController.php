@@ -7,8 +7,10 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Kategori;
+use App\Models\Keranjang;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class MarketplaceController extends Controller
 {
@@ -16,7 +18,8 @@ class MarketplaceController extends Controller
     public function index()
     {
         $products = Product::with('kategori')->get();
-        return view('marketplace.index', compact('products'));
+        $carts = Keranjang::where('user_id',Auth::id())->get();
+        return view('marketplace.index', compact('products','carts'));
     }
 
     // 2. Halaman Jual Barang (Form)

@@ -42,7 +42,7 @@
                                 <form action="{{ route('keranjang.update', $item->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('PUT')
-                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1"
+                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{$item->product->stok + $item->quantity}}"
                                         class="form-control w-50 mr-2" style="max-width: 100px;">
                                     <button type="submit" class="btn btn-success btn-sm">Perbarui</button>
                                 </form>
