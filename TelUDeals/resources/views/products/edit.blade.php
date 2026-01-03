@@ -44,6 +44,17 @@
                 <label class="block font-semibold mb-1">Stok</label>
                 <input type="number" name="stock" value="{{ $product->stock }}" class="w-full border rounded p-2" required>
             </div>
+            
+            <div class="mb-4">
+    <label class="block text-sm font-medium mb-1">Kondisi Barang</label>
+    <select name="product_condition"
+            class="w-full border rounded px-3 py-2"
+            required>
+        <option value="baru" {{ $product->product_condition=='baru'?'selected':'' }}>Baru</option>
+        <option value="bekas" {{ $product->product_condition=='bekas'?'selected':'' }}>Bekas</option>
+    </select>
+</div>
+
 
             @if($product->image)
                 <img src="{{ asset('storage/'.$product->image) }}" class="w-32 mb-3 rounded">

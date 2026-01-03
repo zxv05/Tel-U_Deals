@@ -69,6 +69,11 @@ public function buyNow(Request $request)
 
     $product = Product::findOrFail($request->product_id);
 
+    if ($product->stock <= 0) {
+    return redirect()->back()
+        ->with('error', 'Barang sudah habis');
+}
+
     if ($product->user_id === Auth::id()) {
         abort(403, 'Tidak boleh membeli produk sendiri');
     }

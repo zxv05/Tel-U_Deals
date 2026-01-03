@@ -18,6 +18,7 @@ protected $fillable = [
     'description',
     'price',
     'stock',
+    'product_condition',
     'image',
 ];
 

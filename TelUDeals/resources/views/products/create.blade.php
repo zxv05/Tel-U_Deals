@@ -64,6 +64,28 @@
                 >
             </div>
 
+             {{-- KONDISI BARANG --}}
+          <div>
+         <label class="block font-medium mb-1">
+                Kondisi Barang
+         </label>
+
+        <select name="product_condition" class="w-full border rounded-lg px-3 py-2" required>
+        <option value="">-- Pilih Kondisi --</option>
+        <option value="baru" {{ old('product_condition') == 'baru' ? 'selected' : '' }}>
+            Baru
+        </option>
+        <option value="bekas" {{ old('product_condition') == 'bekas' ? 'selected' : '' }}>
+            Bekas
+        </option>
+        </select>
+
+        @error('product_condition')
+            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+        @enderror
+        </div>
+
+
             {{-- Harga --}}
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Harga</label>

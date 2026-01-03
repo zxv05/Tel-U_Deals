@@ -30,9 +30,14 @@ class ProductController extends Controller
             ->when($request->max_price, fn ($q) =>
                 $q->where('price', '<=', $request->max_price)
             )
+            ->when($request->product_condition, function ($q) use ($request) {
+                $q->whereIn('product_condition', $request->product_condition);
+            })
+
+
             ->get();
 
-        return view('marketplace.index', compact('products'));
+        return view('deals.index', compact('products'));
     }
 
     /**
@@ -71,6 +76,7 @@ class ProductController extends Controller
             'description' => 'required',
             'price'       => 'required|numeric',
             'stock'       => 'required|integer|min:0',
+            'product_condition'  => 'required|in:baru,bekas',
             'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -85,6 +91,7 @@ class ProductController extends Controller
             'description' => $request->description,
             'price'       => $request->price,
             'stock'       => $request->stock,
+            'product_condition' => $request->product_condition,
             'image'       => $imagePath,
         ]);
 
@@ -103,6 +110,17 @@ class ProductController extends Controller
 
         return view('products.edit', compact('product'));
     }
+    /**
+     * ===============================
+     * SHOW (DETAIL PRODUK)
+     * ===============================
+     */
+   public function show($id)
+{
+    $product = Product::findOrFail($id);
+    return view('products.show', compact('product'));
+}
+
 
     /**
      * ===============================
@@ -134,7 +152,8 @@ class ProductController extends Controller
             'category',
             'description',
             'price',
-            'stock'
+            'stock',
+            'product_condition'
         ));
 
         return redirect()->route('products.mine')

@@ -33,6 +33,11 @@ public function index()
 
         $product = Product::findOrFail($request->product_id);
 
+        if ($product->stock <= 0) {
+        return redirect()->back()
+        ->with('error', 'Barang sudah habis');
+}
+
         // ❌ BLOK JIKA USER COBA BELI PRODUK SENDIRI
         if ($product->user_id === Auth::id()) {
             return redirect()

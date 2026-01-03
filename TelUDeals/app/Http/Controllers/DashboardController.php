@@ -20,32 +20,38 @@ class DashboardController extends Controller
      * TEL-U DEALS (MARKETPLACE)
      */
     public function deals(Request $request)
-    {
-        $products = Product::where('user_id', '!=', Auth::id())
+{
+    $products = Product::where('user_id', '!=', auth::id())
 
-            // 🔍 SEARCH NAMA PRODUK
-            ->when($request->search, function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->search . '%');
-            })
+        // SEARCH
+        ->when($request->search, function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%');
+        })
 
-            // 🗂 FILTER KATEGORI
-            ->when($request->category && $request->category !== 'Semua', function ($query) use ($request) {
-                $query->where('category', $request->category);
-            })
+        // KATEGORI
+        ->when($request->category, function ($q) use ($request) {
+            $q->where('category', $request->category);
+        })
 
-            // 💸 RANGE HARGA MIN
-            ->when($request->min_price, function ($query) use ($request) {
-                $query->where('price', '>=', $request->min_price);
-            })
+        // HARGA MIN
+        ->when($request->min_price, function ($q) use ($request) {
+            $q->where('price', '>=', $request->min_price);
+        })
 
-            // 💸 RANGE HARGA MAX
-            ->when($request->max_price, function ($query) use ($request) {
-                $query->where('price', '<=', $request->max_price);
-            })
+        // HARGA MAX
+        ->when($request->max_price, function ($q) use ($request) {
+            $q->where('price', '<=', $request->max_price);
+        })
 
-            ->latest()
-            ->get();
+        // 🔥 KONDISI (BARU / BEKAS) — INI YANG KEMARIN BIKIN ERROR
+        ->when($request->produt_condition, function ($q) use ($request) {
+            $q->whereIn('product_condition', (array) $request->product_condition);
+        })
 
-        return view('deals.index', compact('products'));
-    }
+        ->latest()
+        ->get();
+
+    return view('deals.index', compact('products'));
+}
+
 }

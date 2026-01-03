@@ -20,7 +20,7 @@ Route::get('/', fn () => view('welcome'));
 
 /*
 |--------------------------------------------------------------------------
-| MIDTRANS CALLBACK (PUBLIC - WAJIB TANPA AUTH)
+| MIDTRANS CALLBACK (PUBLIC)
 |--------------------------------------------------------------------------
 */
 Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback'])
@@ -35,43 +35,46 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | DASHBOARD / MARKETPLACE
+    | DASHBOARD
     |--------------------------------------------------------------------------
     */
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
-    Route::get('/deals', [DashboardController::class, 'deals'])
-    ->name('deals');
 
+    /*
+    |--------------------------------------------------------------------------
+    | TEL-U DEALS / MARKETPLACE
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/deals', [ProductController::class, 'index'])
+        ->name('deals');
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRODUCT DETAIL (🔥 INI YANG BARU & WAJIB)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/products/{product}', [ProductController::class, 'show'])
+        ->name('products.show');
 
     /*
     |--------------------------------------------------------------------------
     | CART
     |--------------------------------------------------------------------------
     */
-    Route::get('/cart', [CartController::class, 'index'])
-        ->name('cart.index');
-
-    Route::post('/cart', [CartController::class, 'store'])
-        ->name('cart.store');
-
-    Route::put('/cart/{cart}', [CartController::class, 'update'])
-        ->name('cart.update');
-
-    Route::delete('/cart/{cart}', [CartController::class, 'destroy'])
-        ->name('cart.destroy');
-
-    Route::post('/cart/checkout', [CartController::class, 'checkout'])
-        ->name('cart.checkout');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::put('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
     /*
     |--------------------------------------------------------------------------
-    | BUY NOW (LANGSUNG BUAT ORDER)
+    | BUY NOW (LANGSUNG CHECKOUT)
     |--------------------------------------------------------------------------
     */
     Route::post('/buy-now', [OrderController::class, 'buyNow'])
-        ->name('orders.buyNow')
-        ->middleware('auth');
+        ->name('orders.buyNow');
 
     /*
     |--------------------------------------------------------------------------
@@ -98,28 +101,20 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | TRANSAKSI / ORDERS
+    | ORDERS
     |--------------------------------------------------------------------------
     */
-    Route::get('/orders', [OrderController::class, 'index'])
-        ->name('orders.index');
-
-    Route::get('/orders/{order}', [OrderController::class, 'show'])
-        ->name('orders.show');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
     /*
     |--------------------------------------------------------------------------
     | PROFILE
     |--------------------------------------------------------------------------
     */
-    Route::get('/profile', [ProfileController::class, 'edit'])
-        ->name('profile.edit');
-
-    Route::patch('/profile', [ProfileController::class, 'update'])
-        ->name('profile.update');
-
-    Route::delete('/profile', [ProfileController::class, 'destroy'])
-        ->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 /*
