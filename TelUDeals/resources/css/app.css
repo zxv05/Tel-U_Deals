@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===============================
+   CHALLENGE PART 1 – CART STYLE
+   =============================== */
+
+@layer components {
+
+    /* Wrapper tengah halaman */
+    .container {
+        @apply min-h-screen bg-gray-100 py-10;
+    }
+
+    .container-box {
+        @apply w-full max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8;
+    }
+
+
+.stepper {
+    @apply flex border border-gray-200 rounded-lg overflow-hidden mb-8;
+}
+
+.stepper div {
+    @apply flex-1 text-center py-3 text-sm font-medium bg-gray-100 text-gray-500;
+}
+
+.stepper .active {
+    @apply bg-blue-600 text-white;
+}
+
+
+    /* Item cart */
+    .cart-item {
+        @apply border border-gray-200 rounded-lg p-4 mb-4 bg-gray-50;
+    }
+
+    /* Ringkasan */
+    .cart-summary {
+        @apply mt-6 p-4 rounded-lg bg-gray-100;
+    }
+}
+
+@layer components {
+
+    /* Tombol Bayar Sekarang */
+    .btn-pay {
+        @apply w-full mt-4 py-3 
+               bg-blue-600 text-white 
+               text-lg font-semibold 
+               rounded-lg 
+               flex items-center justify-center gap-2
+               transition-all duration-200
+               hover:bg-blue-700 hover:shadow-lg
+               active:scale-95;
+    }
+
+    /* Optional: icon kecil */
+    .btn-pay svg {
+        @apply w-5 h-5;
+    }
+}
