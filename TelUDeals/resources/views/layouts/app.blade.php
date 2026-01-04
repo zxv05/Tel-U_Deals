@@ -36,10 +36,42 @@
         </main>
     </div>
 
-    <!-- Leaflet JS -->
+       <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- GLOBAL TOAST FUNCTION -->
+    <script>
+        function showToast(type, message) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: type, // success | error | warning | info
+                title: message,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        }
+    </script>
+
+    <!-- TOAST FROM BACKEND (SESSION) -->
+    @if(session('success'))
+        <script>
+            showToast('success', "{{ session('success') }}");
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            showToast('error', "{{ session('error') }}");
+        </script>
+    @endif
 
     <!-- PAGE SCRIPT -->
     @stack('scripts')
 </body>
 </html>
+

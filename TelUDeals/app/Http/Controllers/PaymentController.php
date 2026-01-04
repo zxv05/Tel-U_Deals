@@ -10,41 +10,42 @@ class PaymentController extends Controller
 {
     public function midtransCallback(Request $request)
     {
-        \Midtrans\Config::$serverKey = config('midtrans.server_key');
-        \Midtrans\Config::$isProduction = config('midtrans.is_production');
+        $orderId = $request->order_id;
+        $status = $request->transaction_status;
 
-        $notif = new \Midtrans\Notification();
-
-        $order = Order::where('order_id', $notif->order_id)->first();
+        $order = Order::where('order_id', $orderId)->first();
 
         if (!$order) {
-            return response()->json(['message' => 'Order not found'], 404);
+            return response()->json(['message' => 'Order tidak ditemukan di database'], 404);
         }
 
-        if (in_array($notif->transaction_status, ['capture', 'settlement'])) {
-
+        if (in_array($status, ['capture', 'settlement'])) {
             $order->update([
-                'status' => 'paid',
+                'status' => 'processing', 
                 'payment_status' => 'paid',
             ]);
 
             Payment::updateOrCreate(
                 ['order_id' => $order->id],
                 [
-                    'amount' => $notif->gross_amount,
                     'status' => 'paid',
-                    'payment_date' => now()
+                    'paid_at' => now(),
                 ]
             );
         }
 
-        if (in_array($notif->transaction_status, ['cancel', 'expire', 'deny'])) {
+        if (in_array($status, ['cancel', 'expire', 'deny'])) {
             $order->update([
-                'status' => 'failed',
+                'status' => 'cancelled',
                 'payment_status' => 'failed',
             ]);
+
+            Payment::updateOrCreate(
+                ['order_id' => $order->id],
+                ['status' => 'failed']
+            );
         }
 
-        return response()->json(['message' => 'OK']);
+        return response()->json(['message' => 'Callback success']);
     }
 }

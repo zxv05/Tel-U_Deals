@@ -101,53 +101,53 @@
 
         </div>
     </div>
-<footer class="bg-[#7b0f2b] text-white mt-16">
-    <div class="max-w-7xl mx-auto px-6 py-10">
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-            {{-- BRAND --}}
+{{-- ================= FOOTER ================= --}}
+<footer class="bg-[#7b0f2b] text-white">
+    <div class="max-w-7xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             <div>
-                <h3 class="text-xl font-bold mb-2">Tel-U Deals</h3>
+                <h3 class="text-xl font-bold mb-3">Tel-U Deals</h3>
                 <p class="text-sm text-gray-200">
                     Marketplace internal Telkom University untuk jual beli aman,
                     cepat, dan terpercaya.
                 </p>
             </div>
 
-            {{-- MENU --}}
             <div>
-                <h4 class="font-semibold mb-3">Menu</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a></li>
-                    <li><a href="{{ route('cart.index') }}" class="hover:underline">Marketplace</a></li>
-                    <li><a href="{{ route('orders.index') }}" class="hover:underline">Pesanan</a></li>
+                <h4 class="font-semibold mb-4">Menu</h4>
+                <ul class="space-y-2 text-sm text-gray-200">
+                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ route('deals') }}">Marketplace</a></li>
+                    <li><a href="{{ route('orders.index') }}">Pesanan</a></li>
                 </ul>
             </div>
 
-            {{-- ACCOUNT --}}
             <div>
-                <h4 class="font-semibold mb-3">Akun</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="{{ route('profile.edit') }}" class="hover:underline">Profil</a></li>
+                <h4 class="font-semibold mb-4">Akun</h4>
+                <ul class="space-y-2 text-sm text-gray-200">
+                    <li><a href="{{ route('profile.edit') }}">Profil</a></li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button class="hover:underline">
-                                Logout
-                            </button>
+                            <button>Logout</button>
                         </form>
                     </li>
                 </ul>
             </div>
 
+            <div>
+                <h4 class="font-semibold mb-4">Keamanan & Privasi</h4>
+                <ul class="space-y-2 text-sm text-gray-200">
+                    <li>✔ Transaksi aman</li>
+                    <li>✔ Data pengguna terlindungi</li>
+                    <li>✔ Sistem internal Tel-U</li>
+                </ul>
+            </div>
         </div>
 
-        {{-- COPYRIGHT --}}
-        <div class="border-t border-white/20 mt-8 pt-4 text-center text-sm text-gray-200">
+        <div class="border-t border-white/20 mt-10 pt-6 text-sm text-gray-200">
             © {{ date('Y') }} Tel-U Deals. All rights reserved.
         </div>
     </div>
 </footer>
-
 </x-app-layout>

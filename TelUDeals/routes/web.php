@@ -9,6 +9,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AddressController;
+
 use App\Models\Product;
 
 /*
@@ -20,7 +22,7 @@ Route::get('/', fn () => view('welcome'));
 
 /*
 |--------------------------------------------------------------------------
-| MIDTRANS CALLBACK (PUBLIC - WAJIB TANPA AUTH)
+| MIDTRANS CALLBACK (PUBLIC)
 |--------------------------------------------------------------------------
 */
 Route::post('/payment/midtrans-callback', [PaymentController::class, 'midtransCallback'])
@@ -35,14 +37,60 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | DASHBOARD / MARKETPLACE
+    | DASHBOARD
     |--------------------------------------------------------------------------
     */
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
-    Route::get('/deals', [DashboardController::class, 'deals'])
-    ->name('deals');
 
+    /*
+    |--------------------------------------------------------------------------
+    | TEL-U DEALS / MARKETPLACE
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/deals', [ProductController::class, 'index'])
+        ->name('deals');
+
+    /*
+    |--------------------------------------------------------------------------
+    | SELLER - PRODUK SAYA
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/my-products', [ProductController::class, 'myProducts'])
+        ->name('products.mine');
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRODUCT CREATE (HARUS DI ATAS {product})
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/products/create', [ProductController::class, 'create'])
+        ->name('products.create');
+
+    Route::post('/products', [ProductController::class, 'store'])
+        ->name('products.store');
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRODUCT DETAIL
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/products/{product}', [ProductController::class, 'show'])
+        ->name('products.show');
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRODUCT EDIT / UPDATE / DELETE
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])
+        ->name('products.edit');
+
+    Route::put('/products/{product}', [ProductController::class, 'update'])
+        ->name('products.update');
+
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])
+        ->name('products.destroy');
 
     /*
     |--------------------------------------------------------------------------
@@ -66,50 +114,39 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | BUY NOW (LANGSUNG BUAT ORDER)
+    | BUY NOW
     |--------------------------------------------------------------------------
     */
     Route::post('/buy-now', [OrderController::class, 'buyNow'])
-        ->name('orders.buyNow')
-        ->middleware('auth');
+        ->name('orders.buyNow');
 
     /*
     |--------------------------------------------------------------------------
-    | SELLER - PRODUK SAYA
+    | ORDERS & HISTORY (RATING SYSTEM INCLUDED)
     |--------------------------------------------------------------------------
     */
-    Route::get('/my-products', [ProductController::class, 'myProducts'])
-        ->name('products.mine');
+    // 🛒 Riwayat List
+    Route::get('/orders/history', [OrderController::class, 'history'])
+        ->name('orders.history');
 
-    Route::get('/products/create', [ProductController::class, 'create'])
-        ->name('products.create');
+    // 📄 Detail Riwayat (Invoice & Rating Page)
+    Route::get('/orders/history/{order}', [OrderController::class, 'detailHistory'])
+        ->name('orders.detail');
 
-    Route::post('/products', [ProductController::class, 'store'])
-        ->name('products.store');
+    // ⭐ Simpan Rating
+    Route::post('/orders/review', [OrderController::class, 'storeReview'])
+        ->name('orders.review');
 
-    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])
-        ->name('products.edit');
-
-    Route::put('/products/{product}', [ProductController::class, 'update'])
-        ->name('products.update');
-
-    Route::delete('/products/{product}', [ProductController::class, 'destroy'])
-        ->name('products.destroy');
-
-    /*
-    |--------------------------------------------------------------------------
-    | TRANSAKSI / ORDERS
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/orders', [OrderController::class, 'index'])
-        ->name('orders.index');
-
+    // 💳 Payment Page (Midtrans)
     Route::get('/orders/{order}', [OrderController::class, 'show'])
         ->name('orders.show');
 
+    Route::get('/orders', [OrderController::class, 'index'])
+        ->name('orders.index');
+
     /*
     |--------------------------------------------------------------------------
-    | PROFILE
+    | PROFILE (FIXED)
     |--------------------------------------------------------------------------
     */
     Route::get('/profile', [ProfileController::class, 'edit'])
@@ -118,8 +155,26 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
 
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])
+        ->name('profile.avatar');
+
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADDRESS (PROFILE)
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/addresses', [AddressController::class, 'store'])
+        ->name('addresses.store');
+
+    Route::put('/addresses/{address}', [AddressController::class, 'update'])
+        ->name('addresses.update');
+
+    Route::delete('/addresses/{address}', [AddressController::class, 'destroy'])
+        ->name('addresses.destroy');
+
 });
 
 /*
@@ -128,7 +183,6 @@ Route::middleware(['auth'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::get('/map/products', function (Request $request) {
-
     $latitude  = $request->latitude;
     $longitude = $request->longitude;
     $radius    = $request->radius ?? 10;
@@ -149,4 +203,12 @@ Route::get('/map/products', function (Request $request) {
         ->get();
 });
 
-require __DIR__.'/auth.php';
+/*
+|--------------------------------------------------------------------------
+| SELLER STORE
+|--------------------------------------------------------------------------
+*/
+Route::get('/seller/{user}', [ProductController::class, 'sellerStore'])
+    ->name('seller.store');
+
+require __DIR__ . '/auth.php';

@@ -1,254 +1,198 @@
 <x-app-layout>
     {{-- ================= BACKGROUND IMAGE ================= --}}
-    <div
-        class="min-h-screen bg-cover bg-center bg-fixed"
-        style="background-image: url('{{ asset('images/telubg1.jpg') }}');"
-    >
+    <div class="min-h-screen bg-cover bg-center bg-fixed" style="background-image: url('{{ asset('images/telubg1.jpg') }}');">
         {{-- OVERLAY MERAH --}}
-        <div class="min-h-screen bg-[#7b0f2b]/85 py-10">
+        <div class="min-h-screen bg-[#7b0f2b]/85 py-10 flex items-center justify-center">
+            <div class="max-w-2xl w-full px-4"> {{-- Dipersempit agar lebih fokus di tengah --}}
+                <div class="bg-white rounded-2xl shadow-2xl p-8">
 
-<div class="bg-[#7b0f2b] min-h-screen py-10">
-    <div class="max-w-4xl mx-auto px-4">
+                    {{-- ================= INFO ORDER ================= --}}
+                    <div class="mb-8 space-y-3 border-b pb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm font-medium">Order ID</span>
+                            <span class="font-bold text-gray-800">{{ $order->order_id }}</span>
+                        </div>
 
-        <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm font-medium">Status Order</span>
+                            <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-bold uppercase">
+                                {{ ucfirst($order->status) }}
+                            </span>
+                        </div>
 
-            {{-- ================= INFO ORDER ================= --}}
-            <div class="mb-6 space-y-2">
-                <p><b>Order ID:</b> {{ $order->order_id }}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm font-medium">Status Pembayaran</span>
+                            @if($order->payment_status === 'paid')
+                                <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase">PAID</span>
+                            @else
+                                <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold uppercase">UNPAID</span>
+                            @endif
+                        </div>
+                    </div>
 
-                <p>
-                    <b>Status Order:</b>
-                    <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
-                        {{ ucfirst($order->status) }}
-                    </span>
-                </p>
+                    {{-- ================= ITEM LIST ================= --}}
+                    <div class="space-y-4 mb-8">
+                        @foreach($order->orderDetails as $item)
+                            <div class="flex gap-5 border border-gray-100 rounded-xl p-4 items-center bg-gray-50/50">
+                                <div class="w-20 h-20 bg-white rounded-lg border shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    @if($item->product->image)
+                                        <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="object-contain w-full h-full">
+                                    @else
+                                        <span class="text-[10px] text-gray-400 font-bold uppercase">No Image</span>
+                                    @endif
+                                </div>
 
-                <p>
-                    <b>Status Pembayaran:</b>
-                    @if($order->payment_status === 'paid')
-                        <span class="px-3 py-1 rounded-full bg-green-100 text-green-700">PAID</span>
-                    @else
-                        <span class="px-3 py-1 rounded-full bg-red-100 text-red-700">UNPAID</span>
-                    @endif
-                </p>
-            </div>
+                                <div class="flex-1">
+                                    <p class="font-bold text-gray-800">{{ $item->product->name }}</p>
+                                    <p class="text-xs text-gray-500 mt-1 font-medium text-uppercase tracking-wider">Jumlah: {{ $item->quantity }} Item</p>
+                                </div>
 
-            {{-- ================= ITEM LIST ================= --}}
-@foreach($order->orderDetails as $item)
-<div class="flex gap-4 border rounded-lg p-4 mb-3 items-center">
+                                <div class="font-black text-gray-900 text-right">
+                                    Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
 
-    {{-- IMAGE --}}
-    <div class="w-20 h-20 bg-gray-100 rounded flex items-center justify-center overflow-hidden">
-        @if($item->product->image)
-            <img
-                src="{{ asset('storage/' . $item->product->image) }}"
-                alt="{{ $item->product->name }}"
-                class="object-contain w-full h-full"
-            >
-        @else
-            <span class="text-xs text-gray-400">No Image</span>
-        @endif
-    </div>
+                    {{-- ================= TOTAL ================= --}}
+                    <div class="bg-[#7b0f2b]/5 rounded-xl p-5 mb-8 border border-[#7b0f2b]/10">
+                        <div class="flex justify-between items-center text-[#7b0f2b]">
+                            <span class="font-bold text-lg">Total Pembayaran</span>
+                            <span class="font-black text-2xl tracking-tight">
+                                Rp{{ number_format($order->total_price, 0, ',', '.') }}
+                            </span>
+                        </div>
+                    </div>
 
-    {{-- INFO --}}
-    <div class="flex-1">
-        <p class="font-semibold">
-            {{ $item->product->name }}
-        </p>
-        <p class="text-sm text-gray-500">
-            Qty: {{ $item->quantity }}
-        </p>
-    </div>
-
-    {{-- PRICE --}}
-    <div class="font-semibold text-right">
-        Rp{{ number_format($item->price * $item->quantity, 0) }}
-    </div>
-
-</div>
-@endforeach
-
-
-            {{-- ================= TOTAL ================= --}}
-            <div class="bg-gray-100 rounded-lg p-4 mb-6">
-                <p class="font-bold text-lg">
-                    Total Pembayaran:
-                    <span class="float-right">
-                        Rp{{ number_format($order->total_price, 0) }}
-                    </span>
-                </p>
-            </div>
-
-            {{-- ================= LOKASI PENGIRIMAN ================= --}}
-            <h3 class="font-semibold mb-3">Lokasi Pengiriman</h3>
-
-    {{-- MAP --}}
-    <div id="map" class="w-full h-[300px] rounded mb-4"></div>
-
-    {{-- SEARCH --}}
-    <div class="flex gap-2 mb-3">
-        <input
-            type="text"
-            id="searchLocation"
-            placeholder="Cari lokasi (contoh: Telkom University)"
-            class="flex-1 border rounded px-3 py-2"
-        >
-        <button
-            onclick="searchLocation()"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-            🔍Cari Lokasi
-        </button>
-
-        <button
-            onclick="getMyLocation()"
-            class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded">
-            📍Lokasi Saya
-        </button>
-    </div>
-
-    {{-- COORDINATE --}}
-    <div class="grid grid-cols-2 gap-3">
-        <input id="latitude" class="border rounded px-3 py-2" placeholder="Latitude">
-        <input id="longitude" class="border rounded px-3 py-2" placeholder="Longitude">
-    </div>
-{{-- BUTTON BAYAR --}}
-@if($order->payment_status !== 'paid' && !empty($snapToken))
-    <div class="mt-6">
-        <button id="pay-button"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition">
-            Bayar Sekarang
-        </button>
-    </div>
-@else
-    <div class="mt-6 text-center text-green-600 font-semibold">
-        Pembayaran Berhasil ✔
-    </div>
-@endif
-
-
-</div>
-        </div>
-    </div>
-</div>
-
-{{-- ================= MIDTRANS ================= --}}
-@if(!empty($snapToken))
-<script
-    src="https://app.sandbox.midtrans.com/snap/snap.js"
-    data-client-key="{{ config('midtrans.client_key') }}">
-</script>
-
-<script>
-document.getElementById('pay-button')?.addEventListener('click', function () {
-    snap.pay("{{ $snapToken }}", {
-        onSuccess: () => location.reload(),
-        onPending: () => location.reload(),
-        onError: () => alert('Pembayaran gagal')
-    });
-});
-</script>
-@endif
-
-@push('scripts')
-<script>
-    let map = L.map('map').setView([-6.914744, 107.60981], 13);
-    let marker;
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
-
-    function setMarker(lat, lng) {
-        if (marker) map.removeLayer(marker);
-
-        marker = L.marker([lat, lng]).addTo(map);
-        document.getElementById('latitude').value = lat;
-        document.getElementById('longitude').value = lng;
-    }
-
-    map.on('click', function(e) {
-        setMarker(e.latlng.lat, e.latlng.lng);
-    });
-
-    function getMyLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(pos => {
-                const lat = pos.coords.latitude;
-                const lng = pos.coords.longitude;
-
-                map.setView([lat, lng], 15);
-                setMarker(lat, lng);
-            });
-        } else {
-            alert("Browser tidak mendukung lokasi");
-        }
-    }
-
-    function searchLocation() {
-        const query = document.getElementById('searchLocation').value;
-
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.length > 0) {
-                    const lat = data[0].lat;
-                    const lon = data[0].lon;
-
-                    map.setView([lat, lon], 15);
-                    setMarker(lat, lon);
-                } else {
-                    alert('Lokasi tidak ditemukan');
-                }
-            });
-    }
-</script>
-@endpush
-<footer class="bg-[#7b0f2b] text-white mt-16">
-    <div class="max-w-7xl mx-auto px-6 py-10">
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-            {{-- BRAND --}}
-            <div>
-                <h3 class="text-xl font-bold mb-2">Tel-U Deals</h3>
-                <p class="text-sm text-gray-200">
-                    Marketplace internal Telkom University untuk jual beli aman,
-                    cepat, dan terpercaya.
-                </p>
-            </div>
-
-            {{-- MENU --}}
-            <div>
-                <h4 class="font-semibold mb-3">Menu</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a></li>
-                    <li><a href="{{ route('cart.index') }}" class="hover:underline">Marketplace</a></li>
-                    <li><a href="{{ route('orders.index') }}" class="hover:underline">Pesanan</a></li>
-                </ul>
-            </div>
-
-            {{-- ACCOUNT --}}
-            <div>
-                <h4 class="font-semibold mb-3">Akun</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="{{ route('profile.edit') }}" class="hover:underline">Profil</a></li>
-                    <li>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button class="hover:underline">
-                                Logout
+                    {{-- ================= DETAIL PENGIRIMAN ================= --}}
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#7b0f2b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                Detail Pengiriman
+                            </h3>
+                            <button 
+                                type="button"
+                                onclick="document.getElementById('modalAlamat').style.display = 'flex'"
+                                class="text-[10px] bg-[#7b0f2b] hover:bg-[#9c1437] text-white px-3 py-1.5 rounded-md font-black transition-all shadow-md">
+                                PILIH ALAMAT
                             </button>
-                        </form>
-                    </li>
-                </ul>
+                        </div>
+
+                        <div id="alamatTerpilih" class="p-5 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 transition-all duration-300">
+                            <p class="text-sm"><b>Penerima:</b> <span id="displayNama" class="text-gray-700">{{ Auth::user()->name }}</span></p>
+                            <p class="text-sm text-gray-500 mt-2 leading-relaxed italic" id="displayAlamat">Belum ada alamat yang dipilih.</p>
+                        </div>
+                    </div>
+
+                    {{-- BUTTON BAYAR --}}
+                    @if($order->payment_status !== 'paid' && !empty($snapToken))
+                        <button id="pay-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-black text-lg transition-all shadow-xl shadow-blue-100 active:scale-[0.98]">
+                            BAYAR SEKARANG
+                        </button>
+                    @else
+                        <div class="text-center text-green-700 font-black bg-green-50 py-4 rounded-xl border-2 border-green-200 uppercase tracking-widest text-sm">
+                            Pesanan Telah Dibayar ✔
+                        </div>
+                    @endif
+
+                </div>
             </div>
-
-        </div>
-
-        {{-- COPYRIGHT --}}
-        <div class="border-t border-white/20 mt-8 pt-4 text-center text-sm text-gray-200">
-            © {{ date('Y') }} Tel-U Deals. All rights reserved.
         </div>
     </div>
-</footer>
+
+    {{-- ================= MODAL ALAMAT (DI TENGAH LAYAR) ================= --}}
+    <div id="modalAlamat" style="display: none;" class="fixed inset-0 bg-black/70 z-[9999] backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in duration-300">
+            {{-- Header Modal --}}
+            <div class="p-6 border-b flex justify-between items-center bg-gray-50/80">
+                <h3 class="font-black text-xl text-gray-800 tracking-tight uppercase">Alamat Saya</h3>
+                <button onclick="document.getElementById('modalAlamat').style.display = 'none'" class="h-10 w-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 hover:bg-red-500 hover:text-white transition-all text-2xl font-light">&times;</button>
+            </div>
+            
+            {{-- List Alamat --}}
+            <div class="p-6 overflow-y-auto space-y-4 custom-scrollbar">
+                @forelse($addresses as $addr)
+                    <div class="border-2 border-gray-100 p-5 rounded-2xl hover:border-blue-500 hover:bg-blue-50/50 cursor-pointer transition-all group relative shadow-sm"
+                         onclick="pilihAlamat('{{ $addr->recipient_name }}', '{{ $addr->full_address }}')">
+                        
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-[10px] font-black uppercase px-2 py-1 bg-[#7b0f2b] text-white rounded-md tracking-widest shadow-sm">{{ $addr->label }}</span>
+                            @if($addr->is_primary) 
+                                <span class="text-[9px] bg-green-500 text-white px-2 py-1 rounded-md font-black uppercase tracking-widest shadow-sm">Utama</span> 
+                            @endif
+                        </div>
+                        
+                        <p class="font-black text-gray-900 text-lg">{{ $addr->recipient_name }}</p>
+                        <p class="text-sm text-blue-600 font-bold mb-2">{{ $addr->phone }}</p>
+                        <p class="text-xs text-gray-500 leading-relaxed font-medium">{{ $addr->full_address }}</p>
+
+                        {{-- Icon Check (Muncul saat hover) --}}
+                        <div class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="bg-blue-500 text-white rounded-full p-1 shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed">
+                        <p class="text-gray-400 font-bold uppercase tracking-widest text-xs">Belum ada alamat tersimpan</p>
+                        <a href="{{ route('profile.edit') }}" class="mt-4 inline-block text-[#7b0f2b] font-black text-xs hover:underline decoration-2 underline-offset-4">TAMBAH ALAMAT BARU</a>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    {{-- ================= SCRIPTS ================= --}}
+    @if(!empty($snapToken))
+        <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+        <script>
+            // Fungsi Bayar
+            document.getElementById('pay-button')?.addEventListener('click', function () {
+                const alamat = document.getElementById('displayAlamat').innerText;
+                if (alamat.includes("Belum ada alamat")) {
+                    alert('WAJIB: Pilih alamat pengiriman dulu bang!');
+                    document.getElementById('modalAlamat').style.display = 'flex';
+                    return;
+                }
+
+                snap.pay("{{ $snapToken }}", {
+                    onSuccess: () => location.reload(),
+                    onPending: () => location.reload(),
+                    onError: () => alert('Pembayaran gagal, coba lagi bang')
+                });
+            });
+
+            // Fungsi Pilih Alamat
+            function pilihAlamat(nama, alamat) {
+                document.getElementById('displayNama').innerText = nama;
+                document.getElementById('displayAlamat').innerText = alamat;
+                document.getElementById('displayAlamat').classList.remove('italic', 'text-gray-500');
+
+                // Efek visual box terpilih
+                const box = document.getElementById('alamatTerpilih');
+                box.classList.replace('border-gray-200', 'border-blue-500');
+                box.classList.replace('border-dashed', 'border-solid');
+                box.classList.replace('bg-gray-50', 'bg-white');
+                box.classList.add('shadow-xl', 'shadow-blue-50');
+
+                // Tutup Modal
+                document.getElementById('modalAlamat').style.display = 'none';
+            }
+
+            // Klik di luar modal untuk menutup
+            window.onclick = function(event) {
+                let modal = document.getElementById('modalAlamat');
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
+    @endif
 </x-app-layout>
