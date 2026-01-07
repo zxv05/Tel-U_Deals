@@ -5,7 +5,7 @@
      style="background-image: url('{{ asset('images/telubg1.jpg') }}');">
 
     <div class="min-h-screen bg-[#7b0f2b]/85 py-10">
-
+<div class="h-20"></div>
         <div class="max-w-7xl mx-auto px-4">
 
             {{-- ================= SEARCH ================= --}}
@@ -135,7 +135,7 @@
                                             {{ $product->description }}
                                         </p> --}}
 
-                                        <p class="font-bold text-lg">
+                                        <p class="font-bold text-red-700">
                                             Rp{{ number_format($product->price,0,',','.') }}
                                         </p>
 
@@ -178,7 +178,7 @@
                 <ul class="space-y-2 text-sm text-gray-200">
                     <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li><a href="{{ route('deals') }}">Marketplace</a></li>
-                    <li><a href="{{ route('orders.index') }}">Pesanan</a></li>
+                    <li><a href="{{ route('orders.history') }}">Pesanan</a></li>
                 </ul>
             </div>
 

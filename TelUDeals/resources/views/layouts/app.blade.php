@@ -31,7 +31,7 @@
             </header>
         @endisset
 
-        <main class="py-10">
+        <main >
             {{ $slot }}
         </main>
     </div>

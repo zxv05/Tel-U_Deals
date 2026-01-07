@@ -1,6 +1,11 @@
 <x-app-layout>
 
-<div class="bg-[#7b0f2b]/85 min-h-screen py-10">
+<div class="bg-[#7b0f2b]/85 min-h-screen">
+    {{-- ================= BACKGROUND ================= --}}
+<div class="bg-cover bg-center min-h-screen" style="background-image: url('{{ asset('images/telubg1.jpg') }}');">
+
+<div class="bg-[#7b0f2b]/85 pt-6 pb-10 min-h-screen">
+    <div class="h-20"></div>
 <div class="max-w-7xl mx-auto px-4">
 
 <h1 class="text-2xl font-bold text-white mb-6">Profile</h1>
@@ -43,25 +48,43 @@ Pilih Foto
 
 {{-- ================= CONTENT ================= --}}
 <section class="md:col-span-3 p-8">
-
 {{-- TAB BIODATA --}}
 <div id="tab-biodata" class="tab-content space-y-8">
-<h2 class="text-lg font-semibold">Biodata Diri</h2>
+    <h2 class="text-lg font-semibold">Biodata Diri</h2>
 
-<div class="grid grid-cols-3 gap-4 text-sm">
-<span class="text-gray-500">Nama</span>
-<span class="col-span-2 font-medium">{{ auth()->user()->name }}</span>
+    <div class="grid grid-cols-3 gap-4 text-sm">
+    <span class="text-gray-500">Nama</span>
+    <span class="col-span-2 font-medium">{{ auth()->user()->name }}</span>
 
-<span class="text-gray-500">Email</span>
-<span class="col-span-2 font-medium">{{ auth()->user()->email }}</span>
+    <span class="text-gray-500">Tanggal Lahir</span>
+    <span class="col-span-2 font-medium">
+        {{ auth()->user()->tanggal_lahir ? \Carbon\Carbon::parse(auth()->user()->tanggal_lahir)->translatedFormat('d F Y') : '-' }}
+    </span>
+
+    <span class="text-gray-500">Email</span>
+    <span class="col-span-2 font-medium">{{ auth()->user()->email }}</span>
+
+    <span class="text-gray-500">Nomor HP</span>
+    <span class="col-span-2 font-medium">{{ auth()->user()->phone ?? '-' }}</span>
 </div>
 
-<form method="POST" action="{{ route('profile.update') }}" class="space-y-4 max-w-xl">
-@csrf @method('PATCH')
-<input type="text" name="name" value="{{ auth()->user()->name }}" class="w-full rounded-lg border-gray-300">
-<input type="email" name="email" value="{{ auth()->user()->email }}" class="w-full rounded-lg border-gray-300">
-<button class="bg-green-600 text-white px-6 py-2 rounded-lg">Simpan</button>
-</form>
+    <form method="POST" action="{{ route('profile.update') }}" class="space-y-4 max-w-xl">
+        @csrf @method('PATCH')
+        
+        <label class="block text-sm font-medium text-gray-700">Nama</label>
+        <input type="text" name="name" value="{{ auth()->user()->name }}" class="w-full rounded-lg border-gray-300">
+
+        <label class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+        <input type="date" name="tanggal_lahir" value="{{ auth()->user()->tanggal_lahir }}" class="w-full rounded-lg border-gray-300">
+
+        <label class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" name="email" value="{{ auth()->user()->email }}" class="w-full rounded-lg border-gray-300">
+
+        <label class="block text-sm font-medium text-gray-700">Nomor HP</label>
+        <input type="text" name="phone" value="{{ auth()->user()->phone }}" class="w-full rounded-lg border-gray-300" placeholder="Contoh: 08123456789">
+
+        <button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Simpan</button>
+    </form>
 </div>
 
 {{-- TAB PRIVASI --}}
@@ -201,6 +224,7 @@ Pilih Foto
                 <input
                     id="phoneNumber"
                     type="text"
+                    value="{{ auth()->user()->phone }}"
                     placeholder="Nomor HP"
                     maxlength="15"
                     oninput="validateHp(this)"
@@ -807,5 +831,53 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 .tab-btn{width:100%;padding:10px;border-radius:8px;text-align:left}
 .tab-btn.active{background:#ecfdf5;color:#15803d;font-weight:600}
 </style>
+{{-- ================= FOOTER ================= --}}
+<footer class="bg-[#7b0f2b] text-white">
+    <div class="max-w-7xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div>
+                <h3 class="text-xl font-bold mb-3">Tel-U Deals</h3>
+                <p class="text-sm text-gray-200">
+                    Marketplace internal Telkom University untuk jual beli aman,
+                    cepat, dan terpercaya.
+                </p>
+            </div>
 
+            <div>
+                <h4 class="font-semibold mb-4">Menu</h4>
+                <ul class="space-y-2 text-sm text-gray-200">
+                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ route('deals') }}">Marketplace</a></li>
+                    <li><a href="{{ route('orders.history') }}">Pesanan</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4">Akun</h4>
+                <ul class="space-y-2 text-sm text-gray-200">
+                    <li><a href="{{ route('profile.edit') }}">Profil</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button>Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4">Keamanan & Privasi</h4>
+                <ul class="space-y-2 text-sm text-gray-200">
+                    <li>✔ Transaksi aman</li>
+                    <li>✔ Data pengguna terlindungi</li>
+                    <li>✔ Sistem internal Tel-U</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="border-t border-white/20 mt-10 pt-6 text-sm text-gray-200">
+            © {{ date('Y') }} Tel-U Deals. All rights reserved.
+        </div>
+    </div>
+</footer>
 </x-app-layout>

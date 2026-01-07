@@ -43,20 +43,20 @@ public function update(ProfileUpdateRequest $request): RedirectResponse
     try {
         $user = $request->user();
 
-        // Ambil data valid (name & email)
+        // Ambil data yang sudah divalidasi (termasuk tanggal_lahir & phone)
         $data = $request->validated();
 
-        // PASTIKAN avatar TIDAK ikut campur di sini
+        // Amankan agar avatar tidak tertimpa manual di sini jika ada logika upload terpisah
         unset($data['avatar']);
 
+        // Mengisi data name, email, tanggal_lahir, dan phone secara otomatis
         $user->fill($data);
 
-        // Reset verifikasi email jika berubah
+        // Reset verifikasi email jika email diubah
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
-        // Gunakan save di dalam pengecekan atau database transaction
         $user->save();
 
         return redirect()
@@ -64,13 +64,12 @@ public function update(ProfileUpdateRequest $request): RedirectResponse
             ->with('success', 'Profil berhasil diperbarui.');
 
     } catch (\Exception $e) {
-        // Catat detail error ke log agar bisa dicek developer
-        Log::error("Gagal update profil User ID " . auth::id() . ": " . $e->getMessage());
+        // Log menggunakan facade Log dan Auth
+        Log::error("Gagal update profil User ID " . Auth::id() . ": " . $e->getMessage());
 
-        // Kembalikan ke halaman sebelumnya dengan pesan error
         return back()
-            ->withInput() // Agar input user tidak hilang
-            ->with('error', 'Gagal memperbarui profil. Terjadi kesalahan sistem.');
+            ->withInput()
+            ->with('error', 'Gagal memperbarui profil: ' . $e->getMessage());
     }
 }
 

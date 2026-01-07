@@ -1,118 +1,85 @@
 <x-app-layout>
-        {{-- ================= BACKGROUND IMAGE ================= --}}
-    <div
-        class="min-h-screen bg-cover bg-center bg-fixed"
-        style="background-image: url('{{ asset('images/telubg1.jpg') }}');"
-    >
-        {{-- OVERLAY MERAH --}}
-        <div class="min-h-screen bg-[#7b0f2b]/85 py-10">
-    <x-slot name="header">
-        <h2 class="fw-bold">Tambah Produk</h2>
-    </x-slot>
+{{-- BACKGROUND --}}
+<div
+    class="min-h-screen bg-cover bg-center bg-fixed"
+    style="background-image: url('{{ asset('images/telubg1.jpg') }}');"
+>
+    <div class="min-h-screen bg-[#7b0f2b]/85 py-10">
+<div class="h-20"></div>
+        <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow">
 
-    <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-        @if(session('success'))
-            <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
+                {{-- NAMA --}}
+                <div class="mb-4">
+                    <label class="font-semibold block mb-1">Nama Produk</label>
+                    <input type="text" name="name"
+                           class="w-full border rounded p-2" required>
+                </div>
 
-        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+                {{-- KATEGORI --}}
+                <div class="mb-4">
+                    <label class="font-semibold block mb-1">Kategori</label>
+                    <select name="category" class="w-full border rounded p-2" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="Elektronik">Elektronik</option>
+                        <option value="Furnitur">Furnitur</option>
+                        <option value="Pakaian">Pakaian</option>
+                    </select>
+                </div>
 
-            {{-- Nama --}}
-            <div class="mb-4">
-                <label class="block font-semibold mb-1">Nama Produk</label>
-                <input 
-                    type="text" 
-                    name="name" 
-                    class="w-full border rounded p-2" 
-                    required
-                >
-            </div>
+                {{-- DESKRIPSI --}}
+                <div class="mb-4">
+                    <label class="font-semibold block mb-1">Deskripsi</label>
+                    <textarea name="description"
+                              class="w-full border rounded p-2"
+                              rows="4" required></textarea>
+                </div>
 
-            {{-- Kategori --}}
-            <div class="mb-4">
-                <label class="block font-semibold mb-1">Kategori</label>
-                <select name="category" class="w-full border rounded p-2" required>
-                    <option value="">-- Pilih Kategori --</option>
-                    <option value="Elektronik">Elektronik</option>
-                    <option value="Furnitur">Furnitur</option>
-                    <option value="Pakaian">Pakaian</option>
-                </select>
-            </div>
+                {{-- KONDISI --}}
+                <div class="mb-4">
+                    <label class="font-semibold block mb-1">Kondisi Barang</label>
+                    <select name="product_condition"
+                            class="w-full border rounded p-2" required>
+                        <option value="">-- Pilih --</option>
+                        <option value="baru">Baru</option>
+                        <option value="bekas">Bekas</option>
+                    </select>
+                </div>
 
-            {{-- DESKRIPSI (WAJIB ADA) --}}
-            <div class="mb-4">
-                <label class="block font-semibold mb-1">Deskripsi</label>
-                <textarea 
-                    name="description" 
-                    rows="3"
-                    class="w-full border rounded p-2"
-                    required
-                ></textarea>
-            </div>
-            {{-- Gambar Produk --}}
-            <div class="mb-4">
-                <label class="block font-semibold mb-1">Gambar Produk</label>
-                <input
-                    type="file"
-                    name="image"
-                    accept="image/*"
-                    class="w-full border rounded p-2"
-                >
-            </div>
+                {{-- HARGA --}}
+                <div class="mb-4">
+                    <label class="font-semibold block mb-1">Harga</label>
+                    <input type="number" name="price"
+                           class="w-full border rounded p-2" required>
+                </div>
 
-             {{-- KONDISI BARANG --}}
-          <div>
-         <label class="block font-medium mb-1">
-                Kondisi Barang
-         </label>
+                {{-- STOK --}}
+                <div class="mb-4">
+                    <label class="font-semibold block mb-1">Stok</label>
+                    <input type="number" name="stock"
+                           class="w-full border rounded p-2" required>
+                </div>
 
-        <select name="product_condition" class="w-full border rounded-lg px-3 py-2" required>
-        <option value="">-- Pilih Kondisi --</option>
-        <option value="baru" {{ old('product_condition') == 'baru' ? 'selected' : '' }}>
-            Baru
-        </option>
-        <option value="bekas" {{ old('product_condition') == 'bekas' ? 'selected' : '' }}>
-            Bekas
-        </option>
-        </select>
+                {{-- GAMBAR --}}
+                <div class="mb-6">
+                    <label class="font-semibold block mb-1">Gambar Produk</label>
+                    <input type="file" name="image"
+                           class="w-full border rounded p-2">
+                </div>
 
-        @error('product_condition')
-            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-        @enderror
+                <button
+                    class="w-full bg-red-600 hover:bg-red-700
+                           text-white py-2 rounded-lg font-semibold">
+                    Tambahkan Produk
+                </button>
+            </form>
+
         </div>
 
-
-            {{-- Harga --}}
-            <div class="mb-4">
-                <label class="block font-semibold mb-1">Harga</label>
-                <input 
-                    type="number" 
-                    name="price" 
-                    class="w-full border rounded p-2" 
-                    required
-                >
-            </div>
-
-            {{-- Stok --}}
-            <div class="mb-4">
-                <label class="block font-semibold mb-1">Stok</label>
-                <input 
-                    type="number" 
-                    name="stock" 
-                    class="w-full border rounded p-2" 
-                    required
-                >
-            </div>
-
-            <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">
-                Tambahkan Produk
-            </button>
-        </form>
     </div>
+</div>
 {{-- ================= FOOTER ================= --}}
 <footer class="bg-[#7b0f2b] text-white">
     <div class="max-w-7xl mx-auto px-6 py-12">
@@ -130,7 +97,7 @@
                 <ul class="space-y-2 text-sm text-gray-200">
                     <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li><a href="{{ route('deals') }}">Marketplace</a></li>
-                    <li><a href="{{ route('orders.index') }}">Pesanan</a></li>
+                    <li><a href="{{ route('orders.history') }}">Pesanan</a></li>
                 </ul>
             </div>
 

@@ -15,9 +15,11 @@ class User extends Authenticatable
         return $this->hasMany(Address::class);
     }
     protected $fillable = [
-        'name',     // 🟢 TAMBAHKAN INI
-        'email',    // 🟢 PASTIKAN INI JUGA ADA
-        'password',
-        'avatar',   // Tambahkan ini jika nanti ingin upload foto profil lewat mass assignment
-    ];
+    'name',
+    'email',
+    'password',
+    'tanggal_lahir', // Tambahkan
+    'phone',         // Tambahkan
+    'avatar',
+];
 }

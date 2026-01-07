@@ -7,7 +7,7 @@
     >
         {{-- OVERLAY MERAH --}}
         <div class="min-h-screen bg-[#7b0f2b]/85 py-10">
-
+<div class="h-20"></div>
             <div class="max-w-6xl mx-auto px-4">
 
                 <div class="bg-white rounded-xl shadow p-6">
@@ -101,7 +101,7 @@
                 <ul class="space-y-2 text-sm text-gray-200">
                     <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li><a href="{{ route('deals') }}">Marketplace</a></li>
-                    <li><a href="{{ route('orders.index') }}">Pesanan</a></li>
+                    <li><a href="{{ route('orders.history') }}">Pesanan</a></li>
                 </ul>
             </div>
 

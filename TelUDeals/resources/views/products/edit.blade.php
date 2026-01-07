@@ -6,10 +6,7 @@
     >
         {{-- OVERLAY MERAH --}}
         <div class="min-h-screen bg-[#7b0f2b]/85 py-10">
-    <x-slot name="header">
-        <h2 class="fw-bold">Edit Produk</h2>
-    </x-slot>
-
+<div class="h-20"></div>
     <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
 
         <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
@@ -87,7 +84,7 @@
                 <ul class="space-y-2 text-sm text-gray-200">
                     <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li><a href="{{ route('deals') }}">Marketplace</a></li>
-                    <li><a href="{{ route('orders.index') }}">Pesanan</a></li>
+                    <li><a href="{{ route('orders.history') }}">Pesanan</a></li>
                 </ul>
             </div>
 

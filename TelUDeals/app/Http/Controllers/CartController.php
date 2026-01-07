@@ -10,67 +10,86 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-public function index()
-{
-    $cartItems = Cart::with('product')
-        ->where('user_id', auth::id())
-        ->get();
-
-    $total = $cartItems->sum('total_price');
-
-    return view('cart.index', compact('cartItems', 'total'));
-}
-
-    /**
-     * TAMBAH KE CART
-     */
-    public function store(Request $request)
+    /*
+    |--------------------------------------------------------------------------
+    | HALAMAN KERANJANG
+    |--------------------------------------------------------------------------
+    */
+    public function index()
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity'   => 'required|integer|min:1',
-        ]);
+        $cartItems = Cart::with('product')
+            ->where('user_id', Auth::id())
+            ->get();
 
-        $product = Product::findOrFail($request->product_id);
+        $total = $cartItems->sum('total_price');
 
-        if ($product->stock <= 0) {
-        return redirect()->back()
-        ->with('error', 'Barang sudah habis');
+        return view('cart.index', compact('cartItems', 'total'));
+    }
+    public function __construct()
+{
+    $this->middleware('auth');
 }
 
-        // ❌ BLOK JIKA USER COBA BELI PRODUK SENDIRI
-        if ($product->user_id === Auth::id()) {
-            return redirect()
-                ->route('cart.index')
-                ->with('error', 'Kamu tidak bisa membeli produk milik sendiri.');
-        }
+    /*
+    |--------------------------------------------------------------------------
+    | TAMBAH KE CART
+    |--------------------------------------------------------------------------
+    */
+public function store(Request $request)
+{
+    $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'quantity'   => 'required|integer|min:1',
+    ]);
 
-        // ❌ BLOK JIKA STOK HABIS
-        if ($product->stock < $request->quantity) {
-            return redirect()
-                ->route('cart.index')
-                ->with('error', 'Stok produk tidak mencukupi.');
-        }
+    $product = Product::findOrFail($request->product_id);
 
-        Cart::updateOrCreate(
-            [
-                'user_id'    => Auth::id(),
-                'product_id' => $product->id,
-            ],
-            [
-                'quantity'    => $request->quantity,
-                'total_price' => $product->price * $request->quantity,
-            ]
-        );
-
-        return redirect()
-            ->route('cart.index')
-            ->with('success', 'Produk ditambahkan ke keranjang');
+    // ❌ Produk habis
+    if ($product->stock <= 0) {
+        return $this->responseError($request, 'Barang sudah habis');
     }
 
-    /**
-     * UPDATE JUMLAH CART
-     */
+    // ❌ Tidak boleh beli produk sendiri
+    if ($product->user_id === Auth::id()) {
+        return $this->responseError($request, 'Kamu tidak bisa membeli produk milik sendiri.');
+    }
+
+    // ❌ Stok tidak cukup
+    if ($product->stock < $request->quantity) {
+        return $this->responseError($request, 'Stok produk tidak mencukupi.');
+    }
+
+    Cart::updateOrCreate(
+        [
+            'user_id'    => Auth::id(),
+            'product_id' => $product->id,
+        ],
+        [
+            'quantity'    => $request->quantity,
+            'total_price' => $product->price * $request->quantity,
+        ]
+    );
+
+// ================= AJAX REQUEST =================
+if ($request->expectsJson()) {
+    return response()->json([
+        'success' => true,
+        'message' => 'Produk ditambahkan ke keranjang'
+    ]);
+}
+
+// ================= NORMAL FORM =================
+return redirect()
+    ->route('cart.index')
+    ->with('success', 'Produk ditambahkan ke keranjang');
+
+}
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE JUMLAH ITEM CART
+    |--------------------------------------------------------------------------
+    */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -79,12 +98,12 @@ public function index()
 
         $cartItem = Cart::with('product')->findOrFail($id);
 
-        // ❌ PASTIKAN CART MILIK USER SENDIRI
+        // ❌ Proteksi cart bukan milik user
         if ($cartItem->user_id !== Auth::id()) {
             abort(403);
         }
 
-        // ❌ VALIDASI STOK
+        // ❌ Validasi stok
         if ($cartItem->product->stock < $request->quantity) {
             return redirect()
                 ->route('cart.index')
@@ -100,9 +119,11 @@ public function index()
             ->with('success', 'Keranjang diperbarui');
     }
 
-    /**
-     * HAPUS CART
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | HAPUS ITEM CART
+    |--------------------------------------------------------------------------
+    */
     public function destroy($id)
     {
         $cartItem = Cart::findOrFail($id);
@@ -118,22 +139,25 @@ public function index()
             ->with('success', 'Item dihapus dari keranjang');
     }
 
-    /**
-     * CHECKOUT
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | CHECKOUT CART → ORDER
+    |--------------------------------------------------------------------------
+    */
     public function checkout()
     {
         $cartItems = Cart::with('product')
             ->where('user_id', Auth::id())
             ->get();
 
+        // ❌ Keranjang kosong
         if ($cartItems->isEmpty()) {
             return redirect()
                 ->route('cart.index')
                 ->with('error', 'Keranjang kosong');
         }
 
-        // ❌ DOUBLE SAFETY: CEK ADA PRODUK MILIK SENDIRI ATAU TIDAK
+        // ❌ Double safety: produk milik sendiri
         foreach ($cartItems as $item) {
             if ($item->product->user_id === Auth::id()) {
                 return redirect()
@@ -144,6 +168,7 @@ public function index()
 
         $totalPrice = $cartItems->sum('total_price');
 
+        // Buat order utama
         $order = Order::create([
             'order_id'       => 'ORD-' . strtoupper(uniqid()),
             'user_id'        => Auth::id(),
@@ -152,6 +177,7 @@ public function index()
             'payment_status' => 'unpaid',
         ]);
 
+        // Simpan detail order
         foreach ($cartItems as $item) {
             $order->orderDetails()->create([
                 'product_id' => $item->product_id,
@@ -159,14 +185,16 @@ public function index()
                 'price'      => $item->product->price,
             ]);
 
-            // OPTIONAL: KURANGI STOK
+            // Kurangi stok
             $item->product->decrement('stock', $item->quantity);
         }
 
+        // Kosongkan cart
         Cart::where('user_id', Auth::id())->delete();
 
+        // ✅ FIX PENTING: redirect ke route yang ADA
         return redirect()
-            ->route('orders.index')
+            ->route('orders.history')
             ->with('success', 'Order berhasil dibuat');
     }
 }

@@ -1,128 +1,71 @@
 <x-app-layout>
-  {{-- ================= BACKGROUND ================= --}}
-<div class="bg-cover bg-center"
-     style="background-image: url('{{ asset('images/telubg1.jpg') }}');">
-
-<div class="bg-[#7b0f2b]/85 py-10">
-    <div class="max-w-7xl mx-auto px-6 py-10">
-
-        {{-- SELLER HEADER --}}
-        <div class="bg-white rounded-xl shadow p-6 mb-8 flex items-center gap-4">
-            <div class="h-14 w-14 rounded-full bg-gray-200
-                        flex items-center justify-center
-                        text-xl font-bold text-gray-700">
-                {{ strtoupper(substr($seller->name, 0, 1)) }}
+    <div class="bg-[#7b0f2b] min-h-screen py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            
+            {{-- TOMBOL KEMBALI --}}
+            <div class="mb-8">
+                <a href="{{ route('deals') }}" class="text-white/70 hover:text-white font-bold flex items-center gap-2 transition text-sm">
+                    ← Kembali ke Marketplace
+                </a>
             </div>
 
-            <div>
-                <h2 class="text-xl font-semibold text-gray-800">
-                    {{ $seller->name }}
-                </h2>
-                <p class="text-sm text-gray-500">
-                    {{ $products->count() }} produk dijual
-                </p>
-            </div>
-        </div>
-
-{{-- PRODUCT LIST (SAMA KAYAK DEALS) --}}
-@if ($products->count())
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    @foreach ($products as $product)
-        <a href="{{ route('products.show', $product->id) }}"
-           class="group bg-white rounded-xl shadow
-                  hover:shadow-lg hover:-translate-y-1
-                  transition-all duration-300
-                  overflow-hidden">
-
-            {{-- IMAGE --}}
-            <div class="h-60 bg-gray-100 flex items-center justify-center overflow-hidden">
-                @if($product->image)
-                    <img src="{{ asset('storage/'.$product->image) }}"
-                         class="max-h-full object-contain
-                                transition-transform duration-300
-                                group-hover:scale-105">
-                @else
-                    <span class="text-gray-400 text-sm">No Image</span>
-                @endif
+            {{-- CARD PROFIL PENJUAL --}}
+            <div class="bg-white rounded-[40px] pt-16 pb-10 px-10 mb-12 mt-10 shadow-2xl flex flex-col items-center border-b-[10px] border-black/20">
+                <div class="h-32 w-32 rounded-full overflow-hidden mb-6 shadow-xl border-4 border-white flex-shrink-0 bg-gray-50">
+                    @if($user->avatar)
+                        <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="h-full w-full object-cover">
+                    @else
+                        <div class="h-full w-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                            <span class="text-4xl font-black text-gray-400">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                        </div>
+                    @endif
+                </div>
+                
+                <h1 class="text-3xl font-black text-gray-800 uppercase tracking-tighter mb-1">{{ $user->name }}</h1>
+                <p class="text-gray-400 font-bold italic text-sm mb-6">Member Tel-U Deals sejak {{ $user->created_at->format('d M Y') }}</p>
+                
+                <div class="flex gap-3">
+                    <span class="bg-red-100 text-red-600 px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-200">Verified Seller</span>
+                    <span class="bg-blue-50 text-blue-600 px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-100">{{ $products->count() }} Produk Jualan</span>
+                </div>
             </div>
 
-            {{-- INFO --}}
-            <div class="p-4">
-                <h3 class="font-semibold text-base mb-1 line-clamp-2 text-gray-800">
-                    {{ $product->name }}
-                </h3>
+            <h3 class="text-2xl font-black text-white italic uppercase tracking-tighter mb-8">Koleksi Produk Jualan</h3>
 
-                <span class="inline-block mb-2 px-2 py-1
-                             text-xs rounded-full
-                             bg-green-100 text-green-700">
-                    {{ ucfirst($product->product_condition) }}
-                </span>
+            {{-- GRID PRODUK --}}
+            @if($products->count() > 0)
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    @foreach($products as $item)
+                        <a href="{{ route('products.show', $item->id) }}" class="bg-white rounded-[32px] p-5 shadow-xl flex flex-col transition-transform hover:-translate-y-2">
+                            
+                            {{-- WRAPPER GAMBAR (BADGE SUDAH DIHAPUS) --}}
+                            <div class="relative aspect-square overflow-hidden rounded-[24px] bg-gray-50 mb-5 flex items-center justify-center">
+                                @if($item->image)
+                                    <img src="{{ asset('storage/'.$item->image) }}" class="h-full w-full object-cover">
+                                @else
+                                    <div class="text-gray-200 font-black uppercase italic text-xs">No Image</div>
+                                @endif
+                            </div>
 
-                <p class="text-lg font-bold text-gray-900">
-                    Rp{{ number_format($product->price, 0, ',', '.') }}
-                </p>
+                            {{-- DETAIL --}}
+                            <div class="flex flex-col flex-1">
+                                <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 mb-1 uppercase">{{ $item->name }}</h4>
+                                <p class="text-lg font-black text-red-600 mb-4">Rp{{ number_format($item->price, 0, ',', '.') }}</p>
+                                
+                                <div class="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
+                                    <span class="text-[8px] font-bold text-gray-400 uppercase">{{ $item->category }}</span>
+                                    <span class="text-[8px] font-bold text-green-500 uppercase">Stok: {{ $item->stock }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            @else
+                <div class="bg-black/10 rounded-[40px] py-20 text-center border-4 border-dashed border-white/10">
+                    <p class="text-white/20 text-xl font-black italic uppercase">Kosong Bang!</p>
+                </div>
+            @endif
 
-                <p class="text-sm text-gray-500">
-                    Stok: {{ $product->stock }}
-                </p>
-            </div>
-        </a>
-    @endforeach
-</div>
-@else
-<div class="text-center text-gray-500 mt-16">
-    Seller ini belum memiliki produk.
-</div>
-@endif
-
-    </div>
-    {{-- ================= FOOTER ================= --}}
-<footer class="bg-[#7b0f2b] text-white">
-    <div class="max-w-7xl mx-auto px-6 py-12">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            <div>
-                <h3 class="text-xl font-bold mb-3">Tel-U Deals</h3>
-                <p class="text-sm text-gray-200">
-                    Marketplace internal Telkom University untuk jual beli aman,
-                    cepat, dan terpercaya.
-                </p>
-            </div>
-
-            <div>
-                <h4 class="font-semibold mb-4">Menu</h4>
-                <ul class="space-y-2 text-sm text-gray-200">
-                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li><a href="{{ route('deals') }}">Marketplace</a></li>
-                    <li><a href="{{ route('orders.index') }}">Pesanan</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-semibold mb-4">Akun</h4>
-                <ul class="space-y-2 text-sm text-gray-200">
-                    <li><a href="{{ route('profile.edit') }}">Profil</a></li>
-                    <li>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button>Logout</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-semibold mb-4">Keamanan & Privasi</h4>
-                <ul class="space-y-2 text-sm text-gray-200">
-                    <li>✔ Transaksi aman</li>
-                    <li>✔ Data pengguna terlindungi</li>
-                    <li>✔ Sistem internal Tel-U</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="border-t border-white/20 mt-10 pt-6 text-sm text-gray-200">
-            © {{ date('Y') }} Tel-U Deals. All rights reserved.
         </div>
     </div>
-</footer>
 </x-app-layout>

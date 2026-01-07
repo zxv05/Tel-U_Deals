@@ -1,117 +1,152 @@
-<nav x-data="{ open: false }" class="bg-[#8B1538] border-b border-[#7a1230] shadow">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <div class="flex items-center space-x-6">
+{{-- WRAPPER NAVBAR MELAYANG --}}
+<div x-data="{ open: false }"
+     class="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8">
 
-                    {{-- Dashboard --}}
-                    <a href="{{ route('dashboard') }}"
-                       class="text-white font-medium hover:underline">
-                        Dashboard
+    {{-- NAVBAR UTAMA --}}
+    <nav
+        class="mx-auto max-w-7xl bg-white border border-gray-100
+               shadow-2xl rounded-full transition-all duration-300">
+
+        <div class="px-8">
+            <div class="flex justify-between h-16 items-center">
+
+                {{-- LEFT --}}
+                <div class="flex items-center gap-10">
+                    <a href="{{ route('dashboard') }}" class="flex items-center">
+                        <span class="text-xl font-black text-[#8B1538] tracking-tight">
+                            Tel-U Deals<span class="text-yellow-500">.</span>
+                        </span>
                     </a>
 
-                    {{-- Tel-U Deals --}}
-                    <a href="{{ route('deals') }}"
-                       class="text-white font-medium hover:underline">
-                        Tel-U Deals
-                    </a>
+                    {{-- DESKTOP MENU --}}
+                    <div class="hidden md:flex items-center space-x-2">
+                        @php
+                            $links = [
+                                ['route' => 'dashboard', 'label' => 'Dashboard'],
+                                ['route' => 'deals', 'label' => 'Tel-U Deals'],
+                                ['route' => 'products.mine', 'label' => 'Produk Saya'],
+                                ['route' => 'orders.history', 'label' => 'Riwayat'],
+                                ['route' => 'cart.index', 'label' => 'Keranjang'],
+                            ];
+                        @endphp
 
-                    {{-- Produk Saya --}}
-                    <a href="{{ route('products.mine') }}" 
-                       class="flex items-center gap-1 text-white font-medium hover:underline">
-                        Produk Saya
-                    </a>
+                        @foreach($links as $link)
+                            <a href="{{ route($link['route']) }}"
+                               class="px-5 py-2 text-sm font-bold rounded-full transition
+                               {{ request()->routeIs($link['route'])
+                                   ? 'bg-[#8B1538] text-white shadow'
+                                   : 'text-gray-700 hover:bg-gray-100 hover:text-[#8B1538]' }}">
+                                {{ $link['label'] }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
 
-                    {{-- RIWAYAT (MENU BARU) --}}
-                    <a href="{{ route('orders.history') }}" 
-                       class="flex items-center gap-1 text-white font-medium hover:underline">
-                        Riwayat
-                    </a>
+                {{-- RIGHT --}}
+                <div class="flex items-center gap-3">
 
-                    {{-- Keranjang --}}
-                    <a href="{{ route('cart.index') }}"
-                       class="flex items-center gap-1 text-white font-medium hover:underline">
-                        Keranjang
-                    </a>
+                    {{-- USER DROPDOWN --}}
+                    <x-dropdown align="right" width="48">
+<x-slot name="trigger">
+    <button
+        class="flex items-center gap-3 px-4 py-2 bg-gray-50
+               hover:bg-gray-200 border border-gray-200
+               rounded-full transition shadow-sm">
+
+        @php
+            $user = auth()->user();
+            $avatarUrl = $user && $user->avatar
+                ? asset('storage/' . $user->avatar)
+                : null;
+        @endphp
+
+        <div class="w-8 h-8 rounded-full overflow-hidden
+                    bg-[#8B1538] flex items-center justify-center
+                    text-white font-bold text-xs shadow-inner">
+            @if($avatarUrl)
+                <img src="{{ $avatarUrl }}"
+                     class="w-full h-full object-cover"
+                     alt="Avatar">
+            @else
+                {{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}
+            @endif
+        </div>
+
+        @auth
+            <span class="hidden sm:block text-sm font-bold text-gray-800">
+                {{ $user->name }}
+            </span>
+        @endauth
+
+        <svg class="w-4 h-4 text-gray-400" fill="none"
+             stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+    </button>
+</x-slot>
+
+
+                        <x-slot name="content">
+                            <div class="p-2 bg-white rounded-2xl">
+                                <x-dropdown-link :href="route('profile.edit')"
+                                    class="flex items-center gap-2 py-3 rounded-xl">
+                                    Profil
+                                </x-dropdown-link>
+
+                                <div class="border-t my-2"></div>
+
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <x-dropdown-link
+                                        :href="route('logout')"
+                                        class="text-red-600 hover:bg-red-50 flex items-center gap-2 py-3 rounded-xl font-bold"
+                                        onclick="event.preventDefault(); this.closest('form').submit();">
+                                        Log Out
+                                    </x-dropdown-link>
+                                </form>
+                            </div>
+                        </x-slot>
+                    </x-dropdown>
+
+                    {{-- HAMBURGER --}}
+                    <button @click="open = !open"
+                            class="md:hidden p-2 rounded-full border border-gray-200
+                                   hover:bg-gray-100 transition">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24">
+                            <path x-show="!open" stroke-linecap="round"
+                                  stroke-linejoin="round" stroke-width="2"
+                                  d="M4 6h16M4 12h16M4 18h16"/>
+                            <path x-show="open" stroke-linecap="round"
+                                  stroke-linejoin="round" stroke-width="2"
+                                  d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
 
                 </div>
             </div>
-
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-white/10 hover:bg-white/20 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
-
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/10 focus:outline-none transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
         </div>
+    </nav>
+
+    {{-- MOBILE MENU (DI LUAR NAV) --}}
+    <div
+        x-show="open"
+        x-transition
+        @click.outside="open = false"
+        class="md:hidden mt-4 mx-auto max-w-7xl
+               bg-white rounded-3xl shadow-2xl border
+               p-6 space-y-2"
+    >
+        @foreach($links as $link)
+            <a href="{{ route($link['route']) }}"
+               class="block px-4 py-3 text-base font-bold rounded-2xl transition
+               {{ request()->routeIs($link['route'])
+                   ? 'bg-[#8B1538] text-white'
+                   : 'text-gray-700 hover:bg-gray-100' }}">
+                {{ $link['label'] }}
+            </a>
+        @endforeach
     </div>
 
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('deals')" :active="request()->routeIs('deals')">
-                {{ __('Tel-U Deals') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('orders.history')" :active="request()->routeIs('orders.history')">
-                {{ __('Riwayat') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <div class="pt-4 pb-1 border-t border-white/20">
-            <div class="px-4">
-                <div class="font-medium text-base text-white">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-300">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
-    </div>
-</nav>
+</div>

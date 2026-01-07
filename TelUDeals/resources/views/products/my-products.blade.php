@@ -7,7 +7,7 @@
     >
         {{-- OVERLAY MERAH --}}
         <div class="min-h-screen bg-[#7b0f2b]/85 py-10">
-
+<div class="h-20"></div>
             <div class="max-w-6xl mx-auto px-4">
 
                 <div class="bg-white rounded-xl shadow p-6">
@@ -18,7 +18,7 @@
                         </h3>
 
                         <a href="{{ route('products.create') }}"
-                           class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
+                           class="bg-red-600 hover:bg-red-600 text-white px-4 py-2 rounded">
                             + Tambah Produk
                         </a>
                     </div>
@@ -112,7 +112,7 @@
                 <ul class="space-y-2 text-sm">
                     <li><a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a></li>
                     <li><a href="{{ route('cart.index') }}" class="hover:underline">Marketplace</a></li>
-                    <li><a href="{{ route('orders.index') }}" class="hover:underline">Pesanan</a></li>
+                    <li><a href="{{ route('orders.history') }}" class="hover:underline">Pesanan</a></li>
                 </ul>
             </div>
 

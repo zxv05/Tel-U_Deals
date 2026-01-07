@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Models\User;
 
 class ProductController extends Controller
 {
@@ -17,23 +17,34 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::with('seller')
-            ->where('user_id', '!=', Auth::id())
-            ->when($request->search, fn ($q) =>
-                $q->where('name', 'like', '%' . $request->search . '%')
-            )
-            ->when($request->category, fn ($q) =>
-                $q->where('category', $request->category)
-            )
-            ->when($request->min_price, fn ($q) =>
-                $q->where('price', '>=', $request->min_price)
-            )
-            ->when($request->max_price, fn ($q) =>
-                $q->where('price', '<=', $request->max_price)
-            )
-            ->when($request->product_condition, fn ($q) =>
-                $q->whereIn('product_condition', $request->product_condition)
-            )
+        $products = Product::query()
+
+            // kalau login, sembunyikan produk sendiri
+            ->when(Auth::check(), function ($q) {
+                $q->where('user_id', '!=', Auth::id());
+            })
+
+            ->when($request->search, function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
+            })
+
+            ->when($request->category, function ($q) use ($request) {
+                $q->where('category', $request->category);
+            })
+
+            ->when($request->min_price, function ($q) use ($request) {
+                $q->where('price', '>=', $request->min_price);
+            })
+
+            ->when($request->max_price, function ($q) use ($request) {
+                $q->where('price', '<=', $request->max_price);
+            })
+
+            // FIX: whereIn hanya kalau array
+            ->when(is_array($request->product_condition), function ($q) use ($request) {
+                $q->whereIn('product_condition', $request->product_condition);
+            })
+
             ->latest()
             ->get();
 
@@ -42,31 +53,12 @@ class ProductController extends Controller
 
     /**
      * ===============================
-     * SELLER PAGE
-     * ===============================
-     */
-    public function sellerStore(User $user)
-    {
-        $products = Product::where('user_id', $user->id)
-            ->latest()
-            ->get();
-
-        return view('seller.store', [
-            'seller'   => $user,
-            'products' => $products,
-        ]);
-    }
-
-    /**
-     * ===============================
-     * PRODUK MILIK USER LOGIN
+     * SELLER - PRODUK SAYA
      * ===============================
      */
     public function myProducts()
     {
-        $products = Product::where('user_id', Auth::id())
-            ->latest()
-            ->get();
+        $products = Product::where('user_id', Auth::id())->get();
 
         return view('products.my-products', compact('products'));
     }
@@ -88,43 +80,61 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name'              => 'required|string',
-            'category'          => 'required|string',
+        $request->validate([
+            'name'              => 'required|string|max:255',
+            'category'          => 'required|string|max:100',
             'description'       => 'required|string',
-            'price'             => 'required|numeric',
+            'price'             => 'required|numeric|min:0',
             'stock'             => 'required|integer|min:0',
             'product_condition' => 'required|in:baru,bekas',
             'image'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        $imagePath = null;
+
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('products', 'public');
+            $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        $validated['user_id'] = Auth::id();
-
-        Product::create($validated);
+        Product::create([
+            'user_id'           => Auth::id(),
+            'name'              => $request->name,
+            'category'          => $request->category,
+            'description'       => $request->description,
+            'price'             => $request->price,
+            'stock'             => $request->stock,
+            'product_condition' => $request->product_condition,
+            'image'             => $imagePath,
+        ]);
 
         return redirect()
             ->route('products.mine')
             ->with('success', 'Produk berhasil ditambahkan');
     }
+    public function __construct()
+{
+    $this->middleware('auth')->except([
+        'index',
+        'show',
+        'sellerStore'
+    ]);
+}
 
     /**
      * ===============================
-     * SHOW (DETAIL PRODUK) ✅ FIX
+     * SHOW (DETAIL PRODUK)
      * ===============================
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        $product->load('seller');
+        $product = Product::findOrFail($id);
 
         $relatedProducts = Product::where('category', $product->category)
             ->where('id', '!=', $product->id)
-            ->where('stock', '>', 0)
-            ->latest()
-            ->take(6)
+            ->when(Auth::check(), function ($q) {
+                $q->where('user_id', '!=', Auth::id());
+            })
+            ->limit(5)
             ->get();
 
         return view('products.show', compact('product', 'relatedProducts'));
@@ -151,11 +161,11 @@ class ProductController extends Controller
     {
         abort_if($product->user_id !== Auth::id(), 403);
 
-        $validated = $request->validate([
-            'name'              => 'required|string',
-            'category'          => 'required|string',
+        $request->validate([
+            'name'              => 'required|string|max:255',
+            'category'          => 'required|string|max:100',
             'description'       => 'required|string',
-            'price'             => 'required|numeric',
+            'price'             => 'required|numeric|min:0',
             'stock'             => 'required|integer|min:0',
             'product_condition' => 'required|in:baru,bekas',
             'image'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -165,10 +175,17 @@ class ProductController extends Controller
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
-            $validated['image'] = $request->file('image')->store('products', 'public');
+            $product->image = $request->file('image')->store('products', 'public');
         }
 
-        $product->update($validated);
+        $product->update($request->only([
+            'name',
+            'category',
+            'description',
+            'price',
+            'stock',
+            'product_condition'
+        ]));
 
         return redirect()
             ->route('products.mine')
@@ -193,5 +210,17 @@ class ProductController extends Controller
         return redirect()
             ->route('products.mine')
             ->with('success', 'Produk berhasil dihapus');
+    }
+
+    /**
+     * ===============================
+     * SELLER STORE
+     * ===============================
+     */
+    public function sellerStore(User $user)
+    {
+        $products = Product::where('user_id', $user->id)->latest()->get();
+
+        return view('Seller.store', compact('user', 'products'));
     }
 }

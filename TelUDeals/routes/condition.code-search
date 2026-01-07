@@ -1,0 +1,1538 @@
+# Query: condition
+# ContextLines: 1
+
+429 results - 145 files
+
+Tel-U_Deals\composer.lock:
+  439              "require": {
+  440:                 "illuminate/conditionable": "^12.0",
+  441                  "illuminate/contracts": "^12.0",
+
+  484          {
+  485:             "name": "illuminate/conditionable",
+  486              "version": "v12.40.2",
+
+  488                  "type": "git",
+  489:                 "url": "https://github.com/illuminate/conditionable.git",
+  490                  "reference": "ec677967c1f2faf90b8428919124d2184a4c9b49"
+
+  493                  "type": "zip",
+  494:                 "url": "https://api.github.com/repos/illuminate/conditionable/zipball/ec677967c1f2faf90b8428919124d2184a4c9b49",
+  495                  "reference": "ec677967c1f2faf90b8428919124d2184a4c9b49",
+
+  521              ],
+  522:             "description": "The Illuminate Conditionable package.",
+  523              "homepage": "https://laravel.com",
+
+  944                  "illuminate/collections": "^12.0",
+  945:                 "illuminate/conditionable": "^12.0",
+  946                  "illuminate/contracts": "^12.0",
+
+Tel-U_Deals\TelUDeals\composer.lock:
+  1192                  "illuminate/concurrency": "self.version",
+  1193:                 "illuminate/conditionable": "self.version",
+  1194                  "illuminate/config": "self.version",
+
+  1308                          "src/Illuminate/Collections/",
+  1309:                         "src/Illuminate/Conditionable/"
+  1310                      ]
+
+Tel-U_Deals\TelUDeals\app\Http\Controllers\DashboardController.php:
+  46          // 🔥 KONDISI (BARU / BEKAS) — INI YANG KEMARIN BIKIN ERROR
+  47:         ->when($request->produt_condition, function ($q) use ($request) {
+  48:             $q->whereIn('product_condition', (array) $request->product_condition);
+  49          })
+
+Tel-U_Deals\TelUDeals\app\Http\Controllers\ProductController.php:
+  32              )
+  33:             ->when($request->product_condition, function ($q) use ($request) {
+  34:                 $q->whereIn('product_condition', $request->product_condition);
+  35              })
+
+  78              'stock'       => 'required|integer|min:0',
+  79:             'product_condition'  => 'required|in:baru,bekas',
+  80              'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+  93              'stock'       => $request->stock,
+  94:             'product_condition' => $request->product_condition,
+  95              'image'       => $imagePath,
+
+Tel-U_Deals\TelUDeals\app\Models\Product.php:
+  20      'stock',
+  21:     'product_condition',
+  22      'image',
+
+Tel-U_Deals\TelUDeals\database\migrations\2026_01_03_131925_add_condition_to_products_table.php:
+  11      Schema::table('products', function (Blueprint $table) {
+  12:         $table->enum('condition', ['baru', 'bekas'])->after('category');
+  13      });
+
+  18      Schema::table('products', function (Blueprint $table) {
+  19:         $table->dropColumn('condition');
+  20      });
+
+Tel-U_Deals\TelUDeals\database\migrations\2026_01_03_151712_rename_condition_column_on_products_table.php:
+  10      Schema::table('products', function (Blueprint $table) {
+  11:         $table->renameColumn('condition', 'product_condition');
+  12      });
+
+  17      Schema::table('products', function (Blueprint $table) {
+  18:         $table->renameColumn('product_condition', 'condition');
+  19      });
+
+Tel-U_Deals\TelUDeals\resources\views\deals\index.blade.php:
+   64                  type="checkbox"
+   65:                 name="product_condition[]"
+   66                  value="baru"
+   67                  class="rounded text-green-600"
+   68:                 {{ in_array('baru', (array) request('product_condition')) ? 'checked' : '' }}>
+   69              <span>Baru</span>
+
+   74                  type="checkbox"
+   75:                 name="product_condition[]"
+   76                  value="bekas"
+   77                  class="rounded text-yellow-600"
+   78:                 {{ in_array('bekas', (array) request('product_condition')) ? 'checked' : '' }}>
+   79              <span>Bekas</span>
+
+  115                                          <span class="inline-block text-xs px-2 py-1 rounded-full mb-2 font-semibold
+  116:                                             {{ $product->product_condition === 'baru'
+  117                                                  ? 'bg-green-100 text-green-700'
+  118                                                  : 'bg-yellow-100 text-yellow-700' }}">
+  119:                                             {{ ucfirst($product->product_condition) }}
+  120                                          </span>
+
+Tel-U_Deals\TelUDeals\resources\views\products\create.blade.php:
+  72  
+  73:         <select name="product_condition" class="w-full border rounded-lg px-3 py-2" required>
+  74          <option value="">-- Pilih Kondisi --</option>
+  75:         <option value="baru" {{ old('product_condition') == 'baru' ? 'selected' : '' }}>
+  76              Baru
+  77          </option>
+  78:         <option value="bekas" {{ old('condition') == 'bekas' ? 'selected' : '' }}>
+  79              Bekas
+
+  82  
+  83:         @error('condition')
+  84              <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+
+Tel-U_Deals\TelUDeals\resources\views\products\edit.blade.php:
+  49      <label class="block text-sm font-medium mb-1">Kondisi Barang</label>
+  50:     <select name="condition"
+  51              class="w-full border rounded px-3 py-2"
+  52              required>
+  53:         <option value="baru" {{ $product->condition=='baru'?'selected':'' }}>Baru</option>
+  54:         <option value="bekas" {{ $product->condition=='bekas'?'selected':'' }}>Bekas</option>
+  55      </select>
+
+Tel-U_Deals\vendor\brick\math\LICENSE:
+   9  the Software, and to permit persons to whom the Software is furnished to do so,
+  10: subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\carbonphp\carbon-doctrine-types\LICENSE:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\composer\autoload_psr4.php:
+  38      'Illuminate\\Translation\\' => array($vendorDir . '/illuminate/translation'),
+  39:     'Illuminate\\Support\\' => array($vendorDir . '/illuminate/support', $vendorDir . '/illuminate/collections', $vendorDir . '/illuminate/conditionable', $vendorDir . '/illuminate/macroable'),
+  40      'Illuminate\\Pipeline\\' => array($vendorDir . '/illuminate/pipeline'),
+
+Tel-U_Deals\vendor\composer\autoload_static.php:
+  236              1 => __DIR__ . '/..' . '/illuminate/collections',
+  237:             2 => __DIR__ . '/..' . '/illuminate/conditionable',
+  238              3 => __DIR__ . '/..' . '/illuminate/macroable',
+
+Tel-U_Deals\vendor\composer\installed.json:
+  452              "require": {
+  453:                 "illuminate/conditionable": "^12.0",
+  454                  "illuminate/contracts": "^12.0",
+
+  499          {
+  500:             "name": "illuminate/conditionable",
+  501              "version": "v12.40.2",
+
+  504                  "type": "git",
+  505:                 "url": "https://github.com/illuminate/conditionable.git",
+  506                  "reference": "ec677967c1f2faf90b8428919124d2184a4c9b49"
+
+  509                  "type": "zip",
+  510:                 "url": "https://api.github.com/repos/illuminate/conditionable/zipball/ec677967c1f2faf90b8428919124d2184a4c9b49",
+  511                  "reference": "ec677967c1f2faf90b8428919124d2184a4c9b49",
+
+  539              ],
+  540:             "description": "The Illuminate Conditionable package.",
+  541              "homepage": "https://laravel.com",
+
+  545              },
+  546:             "install-path": "../illuminate/conditionable"
+  547          },
+
+  984                  "illuminate/collections": "^12.0",
+  985:                 "illuminate/conditionable": "^12.0",
+  986                  "illuminate/contracts": "^12.0",
+
+Tel-U_Deals\vendor\composer\installed.php:
+  84          ),
+  85:         'illuminate/conditionable' => array(
+  86              'pretty_version' => 'v12.40.2',
+
+  89              'type' => 'library',
+  90:             'install_path' => __DIR__ . '/../illuminate/conditionable',
+  91              'aliases' => array(),
+
+Tel-U_Deals\vendor\composer\LICENSE:
+  8  copies of the Software, and to permit persons to whom the Software is furnished
+  9: to do so, subject to the following conditions:
+  10  
+
+Tel-U_Deals\vendor\doctrine\inflector\LICENSE:
+  7  of the Software, and to permit persons to whom the Software is furnished to do
+  8: so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\doctrine\lexer\LICENSE:
+  7  of the Software, and to permit persons to whom the Software is furnished to do
+  8: so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\egulias\email-validator\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\egulias\email-validator\src\Parser\Comment.php:
+  47          $moreTokens = true;
+  48:         while ($this->commentStrategy->exitCondition($this->lexer, $this->openedParenthesis) && $moreTokens) {
+  49  
+
+Tel-U_Deals\vendor\egulias\email-validator\src\Parser\FoldingWhiteSpace.php:
+  70  
+  71:         //this has no coverage. Condition is repeated from above one
+  72          if (!$this->lexer->isNextTokenAny(array(EmailLexer::S_SP, EmailLexer::S_HTAB))) {
+
+Tel-U_Deals\vendor\egulias\email-validator\src\Parser\CommentStrategy\CommentStrategy.php:
+  13       */
+  14:     public function exitCondition(EmailLexer $lexer, int $openedParenthesis): bool;
+  15  
+
+Tel-U_Deals\vendor\egulias\email-validator\src\Parser\CommentStrategy\DomainComment.php:
+  12  {
+  13:     public function exitCondition(EmailLexer $lexer, int $openedParenthesis): bool
+  14      {
+
+Tel-U_Deals\vendor\egulias\email-validator\src\Parser\CommentStrategy\LocalComment.php:
+  19  
+  20:     public function exitCondition(EmailLexer $lexer, int $openedParenthesis): bool
+  21      {
+
+Tel-U_Deals\vendor\illuminate\bus\DynamoBatchRepository.php:
+  90      {
+  91:         $condition = 'application = :application';
+  92  
+  93          if ($before) {
+  94:             $condition = 'application = :application AND id < :id';
+  95          }
+
+  98              'TableName' => $this->table,
+  99:             'KeyConditionExpression' => $condition,
+  100              'ExpressionAttributeValues' => array_filter([
+
+Tel-U_Deals\vendor\illuminate\bus\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\bus\PendingBatch.php:
+  10  use Illuminate\Support\Collection;
+  11: use Illuminate\Support\Traits\Conditionable;
+  12  use Laravel\SerializableClosure\SerializableClosure;
+
+  19  {
+  20:     use Conditionable;
+  21  
+
+Tel-U_Deals\vendor\illuminate\collections\Arr.php:
+  1115      /**
+  1116:      * Conditionally compile classes from an array into a CSS class list.
+  1117       *
+
+  1138      /**
+  1139:      * Conditionally compile styles from an array into a style list.
+  1140       *
+
+Tel-U_Deals\vendor\illuminate\collections\Collection.php:
+   723      /**
+   724:      * Determine if the collection contains exactly one item. If a callback is provided, determine if exactly one item matches the condition.
+   725       *
+
+  1315      /**
+  1316:      * Skip items in the collection until the given condition is met.
+  1317       *
+
+  1326      /**
+  1327:      * Skip items in the collection while the given condition is met.
+  1328       *
+
+  1714      /**
+  1715:      * Take items in the collection until the given condition is met.
+  1716       *
+
+  1725      /**
+  1726:      * Take items in the collection while the given condition is met.
+  1727       *
+
+Tel-U_Deals\vendor\illuminate\collections\composer.json:
+  17          "php": "^8.2",
+  18:         "illuminate/conditionable": "^12.0",
+  19          "illuminate/contracts": "^12.0",
+
+Tel-U_Deals\vendor\illuminate\collections\Enumerable.php:
+   939      /**
+   940:      * Skip items in the collection until the given condition is met.
+   941       *
+
+   947      /**
+   948:      * Skip items in the collection while the given condition is met.
+   949       *
+
+  1097      /**
+  1098:      * Take items in the collection until the given condition is met.
+  1099       *
+
+  1105      /**
+  1106:      * Take items in the collection while the given condition is met.
+  1107       *
+
+Tel-U_Deals\vendor\illuminate\collections\helpers.php:
+  271      /**
+  272:      * Return a value if the given condition is true.
+  273       *
+  274:      * @param  mixed  $condition
+  275       * @param  \Closure|mixed  $value
+
+  278       */
+  279:     function when($condition, $value, $default = null)
+  280      {
+  281:         $condition = $condition instanceof Closure ? $condition() : $condition;
+  282  
+  283:         if ($condition) {
+  284:             return value($value, $condition);
+  285          }
+  286  
+  287:         return value($default, $condition);
+  288      }
+
+Tel-U_Deals\vendor\illuminate\collections\LazyCollection.php:
+  1285      /**
+  1286:      * Skip items in the collection until the given condition is met.
+  1287       *
+
+  1298      /**
+  1299:      * Skip items in the collection while the given condition is met.
+  1300       *
+
+  1618      /**
+  1619:      * Take items in the collection until the given condition is met.
+  1620       *
+
+  1674      /**
+  1675:      * Take items in the collection while the given condition is met.
+  1676       *
+
+Tel-U_Deals\vendor\illuminate\collections\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\collections\Traits\EnumeratesValues.php:
+  58  {
+  59:     use Conditionable;
+  60  
+
+Tel-U_Deals\vendor\illuminate\conditionable\composer.json:
+  1  {
+  2:     "name": "illuminate/conditionable",
+  3:     "description": "The Illuminate Conditionable package.",
+  4      "license": "MIT",
+
+Tel-U_Deals\vendor\illuminate\conditionable\HigherOrderWhenProxy.php:
+    7      /**
+    8:      * The target being conditionally operated on.
+    9       *
+
+   14      /**
+   15:      * The condition for proxying.
+   16       *
+
+   18       */
+   19:     protected $condition;
+   20  
+   21      /**
+   22:      * Indicates whether the proxy has a condition.
+   23       *
+
+   25       */
+   26:     protected $hasCondition = false;
+   27  
+   28      /**
+   29:      * Determine whether the condition should be negated.
+   30       *
+
+   32       */
+   33:     protected $negateConditionOnCapture;
+   34  
+
+   45      /**
+   46:      * Set the condition on the proxy.
+   47       *
+   48:      * @param  bool  $condition
+   49       * @return $this
+   50       */
+   51:     public function condition($condition)
+   52      {
+   53:         [$this->condition, $this->hasCondition] = [$condition, true];
+   54  
+
+   58      /**
+   59:      * Indicate that the condition should be negated.
+   60       *
+
+   62       */
+   63:     public function negateConditionOnCapture()
+   64      {
+   65:         $this->negateConditionOnCapture = true;
+   66  
+
+   77      {
+   78:         if (! $this->hasCondition) {
+   79:             $condition = $this->target->{$key};
+   80  
+   81:             return $this->condition($this->negateConditionOnCapture ? ! $condition : $condition);
+   82          }
+   83  
+   84:         return $this->condition
+   85              ? $this->target->{$key}
+
+   97      {
+   98:         if (! $this->hasCondition) {
+   99:             $condition = $this->target->{$method}(...$parameters);
+  100  
+  101:             return $this->condition($this->negateConditionOnCapture ? ! $condition : $condition);
+  102          }
+  103  
+  104:         return $this->condition
+  105              ? $this->target->{$method}(...$parameters)
+
+Tel-U_Deals\vendor\illuminate\conditionable\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\conditionable\Traits\Conditionable.php:
+   7  
+   8: trait Conditionable
+   9  {
+
+  29          if (func_num_args() === 1) {
+  30:             return (new HigherOrderWhenProxy($this))->condition($value);
+  31          }
+
+  57          if (func_num_args() === 0) {
+  58:             return (new HigherOrderWhenProxy($this))->negateConditionOnCapture();
+  59          }
+
+  61          if (func_num_args() === 1) {
+  62:             return (new HigherOrderWhenProxy($this))->condition(! $value);
+  63          }
+
+Tel-U_Deals\vendor\illuminate\console\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\console\Scheduling\Event.php:
+  491      /**
+  492:      * Register a callback to ping a given URL before the job runs if the given condition is true.
+  493       *
+
+  514      /**
+  515:      * Register a callback to ping a given URL after the job runs if the given condition is true.
+  516       *
+
+  537      /**
+  538:      * Register a callback to ping a given URL if the operation succeeds and if the given condition is true.
+  539       *
+
+  560      /**
+  561:      * Register a callback to ping a given URL if the operation fails and if the given condition is true.
+  562       *
+
+Tel-U_Deals\vendor\illuminate\container\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\contracts\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\contracts\Auth\SupportsBasicAuth.php:
+  10       * @param  string  $field
+  11:      * @param  array  $extraConditions
+  12       * @return \Symfony\Component\HttpFoundation\Response|null
+  13       */
+  14:     public function basic($field = 'email', $extraConditions = []);
+  15  
+
+  19       * @param  string  $field
+  20:      * @param  array  $extraConditions
+  21       * @return \Symfony\Component\HttpFoundation\Response|null
+  22       */
+  23:     public function onceBasic($field = 'email', $extraConditions = []);
+  24  }
+
+Tel-U_Deals\vendor\illuminate\contracts\Database\Query\ConditionExpression.php:
+  4  
+  5: interface ConditionExpression extends Expression
+  6  {
+
+Tel-U_Deals\vendor\illuminate\contracts\Process\ProcessResult.php:
+  73      /**
+  74:      * Throw an exception if the process failed and the given condition is true.
+  75       *
+  76:      * @param  bool  $condition
+  77       * @param  callable|null  $callback
+
+  79       */
+  80:     public function throwIf(bool $condition, ?callable $callback = null);
+  81  }
+
+Tel-U_Deals\vendor\illuminate\contracts\Validation\Validator.php:
+  41      /**
+  42:      * Add conditions to a given field based on a Closure.
+  43       *
+
+Tel-U_Deals\vendor\illuminate\events\Dispatcher.php:
+  366      /**
+  367:      * Check if the event should be broadcasted by the condition.
+  368       *
+
+Tel-U_Deals\vendor\illuminate\events\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\filesystem\AwsS3V3Adapter.php:
+   5  use Aws\S3\S3Client;
+   6: use Illuminate\Support\Traits\Conditionable;
+   7  use League\Flysystem\FilesystemAdapter as FlysystemAdapter;
+
+  11  {
+  12:     use Conditionable;
+  13  
+
+Tel-U_Deals\vendor\illuminate\filesystem\Filesystem.php:
+   8  use Illuminate\Support\LazyCollection;
+   9: use Illuminate\Support\Traits\Conditionable;
+  10  use Illuminate\Support\Traits\Macroable;
+
+  18  {
+  19:     use Conditionable, Macroable;
+  20  
+
+Tel-U_Deals\vendor\illuminate\filesystem\FilesystemAdapter.php:
+  14  use Illuminate\Support\Str;
+  15: use Illuminate\Support\Traits\Conditionable;
+  16  use Illuminate\Support\Traits\Macroable;
+
+  46  {
+  47:     use Conditionable;
+  48      use Macroable {
+
+Tel-U_Deals\vendor\illuminate\filesystem\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\filesystem\LocalFilesystemAdapter.php:
+   5  use Closure;
+   6: use Illuminate\Support\Traits\Conditionable;
+   7  use RuntimeException;
+
+  10  {
+  11:     use Conditionable;
+  12  
+
+Tel-U_Deals\vendor\illuminate\macroable\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\pipeline\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\pipeline\Pipeline.php:
+   7  use Illuminate\Contracts\Pipeline\Pipeline as PipelineContract;
+   8: use Illuminate\Support\Traits\Conditionable;
+   9  use Illuminate\Support\Traits\Macroable;
+
+  14  {
+  15:     use Conditionable;
+  16      use Macroable;
+
+Tel-U_Deals\vendor\illuminate\support\Carbon.php:
+   6  use Carbon\CarbonImmutable as BaseCarbonImmutable;
+   7: use Illuminate\Support\Traits\Conditionable;
+   8  use Illuminate\Support\Traits\Dumpable;
+
+  13  {
+  14:     use Conditionable, Dumpable;
+  15  
+
+Tel-U_Deals\vendor\illuminate\support\composer.json:
+  22          "illuminate/collections": "^12.0",
+  23:         "illuminate/conditionable": "^12.0",
+  24          "illuminate/contracts": "^12.0",
+
+Tel-U_Deals\vendor\illuminate\support\Fluent.php:
+   8  use Illuminate\Contracts\Support\Jsonable;
+   9: use Illuminate\Support\Traits\Conditionable;
+  10  use Illuminate\Support\Traits\InteractsWithData;
+
+  24  {
+  25:     use Conditionable, InteractsWithData, Macroable {
+  26          __call as macroCall;
+
+Tel-U_Deals\vendor\illuminate\support\helpers.php:
+  397      /**
+  398:      * Throw the given exception if the given condition is true.
+  399       *
+
+  404       *
+  405:      * @param  TValue  $condition
+  406       * @param  Closure(TParams): TExceptionValue|TExceptionValue  $exception
+  407       * @param  TParams  ...$parameters
+  408:      * @return ($condition is true ? never : ($condition is non-empty-mixed ? never : TValue))
+  409       *
+
+  411       */
+  412:     function throw_if($condition, $exception = 'RuntimeException', ...$parameters)
+  413      {
+  414:         if ($condition) {
+  415              if ($exception instanceof Closure) {
+
+  425  
+  426:         return $condition;
+  427      }
+
+  431      /**
+  432:      * Throw the given exception unless the given condition is true.
+  433       *
+
+  438       *
+  439:      * @param  TValue  $condition
+  440       * @param  Closure(TParams): TExceptionValue|TExceptionValue  $exception
+  441       * @param  TParams  ...$parameters
+  442:      * @return ($condition is false ? never : ($condition is non-empty-mixed ? TValue : never))
+  443       *
+
+  445       */
+  446:     function throw_unless($condition, $exception = 'RuntimeException', ...$parameters)
+  447      {
+  448:         throw_if(! $condition, $exception, ...$parameters);
+  449  
+  450:         return $condition;
+  451      }
+
+Tel-U_Deals\vendor\illuminate\support\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\support\MessageBag.php:
+  68      /**
+  69:      * Add a message to the message bag if the given conditional is "true".
+  70       *
+
+Tel-U_Deals\vendor\illuminate\support\Sleep.php:
+  507      /**
+  508:      * Only sleep when the given condition is true.
+  509       *
+  510:      * @param  (\Closure($this): bool)|bool  $condition
+  511       * @return $this
+  512       */
+  513:     public function when($condition)
+  514      {
+  515:         $this->shouldSleep = (bool) value($condition, $this);
+  516  
+
+  520      /**
+  521:      * Don't sleep when the given condition is true.
+  522       *
+  523:      * @param  (\Closure($this): bool)|bool  $condition
+  524       * @return $this
+  525       */
+  526:     public function unless($condition)
+  527      {
+  528:         return $this->when(! value($condition, $this));
+  529      }
+
+Tel-U_Deals\vendor\illuminate\support\Stringable.php:
+   7  use Illuminate\Support\Facades\Date;
+   8: use Illuminate\Support\Traits\Conditionable;
+   9  use Illuminate\Support\Traits\Dumpable;
+
+  16  {
+  17:     use Conditionable, Dumpable, Macroable, Tappable;
+  18  
+
+Tel-U_Deals\vendor\illuminate\support\Uri.php:
+   9  use Illuminate\Http\RedirectResponse;
+  10: use Illuminate\Support\Traits\Conditionable;
+  11  use Illuminate\Support\Traits\Dumpable;
+
+  21  {
+  22:     use Conditionable, Dumpable, Macroable, Tappable;
+  23  
+
+Tel-U_Deals\vendor\illuminate\support\Facades\Auth.php:
+  38   * @method static void logout()
+  39:  * @method static \Symfony\Component\HttpFoundation\Response|null basic(string $field = 'email', array $extraConditions = [])
+  40:  * @method static \Symfony\Component\HttpFoundation\Response|null onceBasic(string $field = 'email', array $extraConditions = [])
+  41   * @method static bool attemptWhen(array $credentials = [], array|callable|null $callbacks = null, bool $remember = false)
+
+Tel-U_Deals\vendor\illuminate\support\Facades\Gate.php:
+   8   * @method static bool has(string|array $ability)
+   9:  * @method static \Illuminate\Auth\Access\Response allowIf(\Illuminate\Auth\Access\Response|\Closure|bool $condition, string|null $message = null, string|null $code = null)
+  10:  * @method static \Illuminate\Auth\Access\Response denyIf(\Illuminate\Auth\Access\Response|\Closure|bool $condition, string|null $message = null, string|null $code = null)
+  11   * @method static \Illuminate\Auth\Access\Gate define(\UnitEnum|string $ability, callable|array|string $callback)
+
+Tel-U_Deals\vendor\illuminate\support\Facades\Http.php:
+  69   * @method static \Illuminate\Http\Client\PendingRequest throw(callable|null $callback = null)
+  70:  * @method static \Illuminate\Http\Client\PendingRequest throwIf(callable|bool $condition)
+  71:  * @method static \Illuminate\Http\Client\PendingRequest throwUnless(callable|bool $condition)
+  72   * @method static \Illuminate\Http\Client\PendingRequest dump()
+
+Tel-U_Deals\vendor\illuminate\support\Facades\View.php:
+   8   * @method static \Illuminate\Contracts\View\View first(array $views, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
+   9:  * @method static string renderWhen(bool $condition, string $view, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
+  10:  * @method static string renderUnless(bool $condition, string $view, \Illuminate\Contracts\Support\Arrayable|array $data = [], array $mergeData = [])
+  11   * @method static string renderEach(string $view, array $data, string $iterator, string $empty = 'raw|')
+
+Tel-U_Deals\vendor\illuminate\translation\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\translation\MessageSelector.php:
+  24  
+  25:         $segments = $this->stripConditions($segments);
+  26  
+
+  36      /**
+  37:      * Extract a translation string using inline conditions.
+  38       *
+
+  52      /**
+  53:      * Get the translation string if the condition matches.
+  54       *
+
+  66  
+  67:         $condition = $matches[1];
+  68  
+
+  70  
+  71:         if (str_contains($condition, ',')) {
+  72:             [$from, $to] = explode(',', $condition, 2);
+  73  
+
+  82  
+  83:         return $condition == $number ? $value : null;
+  84      }
+
+  86      /**
+  87:      * Strip the inline conditions from each segment, just leaving the text.
+  88       *
+
+  91       */
+  92:     private function stripConditions($segments)
+  93      {
+
+Tel-U_Deals\vendor\illuminate\validation\ConditionalRules.php:
+   6  
+   7: class ConditionalRules
+   8  {
+   9      /**
+  10:      * The boolean condition indicating if the rules should be added to the attribute.
+  11       *
+
+  13       */
+  14:     protected $condition;
+  15  
+
+  23      /**
+  24:      * The rules to be added to the attribute if the condition fails.
+  25       *
+
+  30      /**
+  31:      * Create a new conditional rules instance.
+  32       *
+  33:      * @param  callable|bool  $condition
+  34       * @param  \Illuminate\Contracts\Validation\ValidationRule|\Illuminate\Contracts\Validation\InvokableRule|\Illuminate\Contracts\Validation\Rule|\Closure|array|string  $rules
+
+  36       */
+  37:     public function __construct($condition, $rules, $defaultRules = [])
+  38      {
+  39:         $this->condition = $condition;
+  40          $this->rules = $rules;
+
+  44      /**
+  45:      * Determine if the conditional rules should be added.
+  46       *
+
+  51      {
+  52:         return is_callable($this->condition)
+  53:             ? call_user_func($this->condition, new Fluent($data))
+  54:             : $this->condition;
+  55      }
+
+Tel-U_Deals\vendor\illuminate\validation\DatabasePresenceVerifier.php:
+  52  
+  53:         return $this->addConditions($query, $extra)->count();
+  54      }
+
+  68  
+  69:         return $this->addConditions($query, $extra)->distinct()->count($column);
+  70      }
+
+  72      /**
+  73:      * Add the given conditions to the query.
+  74       *
+  75       * @param  \Illuminate\Database\Query\Builder  $query
+  76:      * @param  array  $conditions
+  77       * @return \Illuminate\Database\Query\Builder
+  78       */
+  79:     protected function addConditions($query, $conditions)
+  80      {
+  81:         foreach ($conditions as $key => $value) {
+  82              if ($value instanceof Closure) {
+
+Tel-U_Deals\vendor\illuminate\validation\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\validation\Rule.php:
+   42      /**
+   43:      * Apply the given rules if the given condition is truthy.
+   44       *
+   45:      * @param  callable|bool  $condition
+   46       * @param  \Illuminate\Contracts\Validation\ValidationRule|\Illuminate\Contracts\Validation\InvokableRule|\Illuminate\Contracts\Validation\Rule|\Closure|array|string  $rules
+   47       * @param  \Illuminate\Contracts\Validation\ValidationRule|\Illuminate\Contracts\Validation\InvokableRule|\Illuminate\Contracts\Validation\Rule|\Closure|array|string  $defaultRules
+   48:      * @return \Illuminate\Validation\ConditionalRules
+   49       */
+   50:     public static function when($condition, $rules, $defaultRules = [])
+   51      {
+   52:         return new ConditionalRules($condition, $rules, $defaultRules);
+   53      }
+
+   55      /**
+   56:      * Apply the given rules if the given condition is falsy.
+   57       *
+   58:      * @param  callable|bool  $condition
+   59       * @param  \Illuminate\Contracts\Validation\ValidationRule|\Illuminate\Contracts\Validation\InvokableRule|\Illuminate\Contracts\Validation\Rule|\Closure|array|string  $rules
+   60       * @param  \Illuminate\Contracts\Validation\ValidationRule|\Illuminate\Contracts\Validation\InvokableRule|\Illuminate\Contracts\Validation\Rule|\Closure|array|string  $defaultRules
+   61:      * @return \Illuminate\Validation\ConditionalRules
+   62       */
+   63:     public static function unless($condition, $rules, $defaultRules = [])
+   64      {
+   65:         return new ConditionalRules($condition, $defaultRules, $rules);
+   66      }
+
+  318  
+  319:         return $parser->explode(ValidationRuleParser::filterConditionalRules($rules, $data));
+  320      }
+
+Tel-U_Deals\vendor\illuminate\validation\ValidationRuleParser.php:
+  327      /**
+  328:      * Expand the conditional rules in the given array of rules.
+  329       *
+
+  333       */
+  334:     public static function filterConditionalRules($rules, array $data = [])
+  335      {
+
+  337              if (! is_array($attributeRules) &&
+  338:                 ! $attributeRules instanceof ConditionalRules) {
+  339                  return [$attribute => $attributeRules];
+
+  341  
+  342:             if ($attributeRules instanceof ConditionalRules) {
+  343                  return [$attribute => $attributeRules->passes($data)
+
+  348              return [$attribute => (new Collection($attributeRules))->map(function ($rule) use ($data) {
+  349:                 if (! $rule instanceof ConditionalRules) {
+  350                      return [$rule];
+
+Tel-U_Deals\vendor\illuminate\validation\Validator.php:
+  1248          $response = (new ValidationRuleParser($this->data))
+  1249:             ->explode(ValidationRuleParser::filterConditionalRules($rules, $this->data));
+  1250  
+
+  1260      /**
+  1261:      * Add conditions to a given field based on a Closure.
+  1262       *
+
+Tel-U_Deals\vendor\illuminate\validation\Concerns\ValidatesAttributes.php:
+   787      /**
+   788:      * Test if the given width and height fail any conditions.
+   789       *
+
+  1024  
+  1025:         $extra = $this->getExtraConditions(
+  1026              array_values(array_slice($parameters, 2))
+
+  1122      /**
+  1123:      * Get the extra conditions for a unique rule.
+  1124       *
+
+  1130          if (isset($parameters[4])) {
+  1131:             return $this->getExtraConditions(array_slice($parameters, 4));
+  1132          }
+
+  1193      /**
+  1194:      * Get the extra conditions for a unique / exists rule.
+  1195       *
+
+  1198       */
+  1199:     protected function getExtraConditions(array $segments)
+  1200      {
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\Date.php:
+   6  use Illuminate\Support\Arr;
+   7: use Illuminate\Support\Traits\Conditionable;
+   8  use Illuminate\Support\Traits\Macroable;
+
+  12  {
+  13:     use Conditionable, Macroable;
+  14  
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\Dimensions.php:
+   4  
+   5: use Illuminate\Support\Traits\Conditionable;
+   6  use Stringable;
+
+   9  {
+  10:     use Conditionable;
+  11  
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\Email.php:
+   9  use Illuminate\Support\Facades\Validator;
+  10: use Illuminate\Support\Traits\Conditionable;
+  11  use Illuminate\Support\Traits\Macroable;
+
+  15  {
+  16:     use Conditionable, Macroable;
+  17  
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\Enum.php:
+   8  use Illuminate\Support\Arr;
+   9: use Illuminate\Support\Traits\Conditionable;
+  10  use TypeError;
+
+  13  {
+  14:     use Conditionable;
+  15  
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\ExcludeIf.php:
+  11      /**
+  12:      * The condition that validates the attribute.
+  13       *
+
+  15       */
+  16:     public $condition;
+  17  
+  18      /**
+  19:      * Create a new exclude validation rule based on a condition.
+  20       *
+  21:      * @param  (\Closure(): bool)|bool  $condition
+  22       *
+
+  24       */
+  25:     public function __construct($condition)
+  26      {
+  27:         if ($condition instanceof Closure || is_bool($condition)) {
+  28:             $this->condition = $condition;
+  29          } else {
+  30:             throw new InvalidArgumentException('The provided condition must be a callable or boolean.');
+  31          }
+
+  40      {
+  41:         if (is_callable($this->condition)) {
+  42:             return call_user_func($this->condition) ? 'exclude' : '';
+  43          }
+  44  
+  45:         return $this->condition ? 'exclude' : '';
+  46      }
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\Exists.php:
+   4  
+   5: use Illuminate\Support\Traits\Conditionable;
+   6  use Stringable;
+
+   9  {
+  10:     use Conditionable, DatabaseRule;
+  11  
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\File.php:
+  11  use Illuminate\Support\Str;
+  12: use Illuminate\Support\Traits\Conditionable;
+  13  use Illuminate\Support\Traits\Macroable;
+
+  17  {
+  18:     use Conditionable, Macroable;
+  19  
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\Numeric.php:
+   5  use Illuminate\Support\Arr;
+   6: use Illuminate\Support\Traits\Conditionable;
+   7  use Stringable;
+
+  10  {
+  11:     use Conditionable;
+  12  
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\Password.php:
+  11  use Illuminate\Support\Facades\Validator;
+  12: use Illuminate\Support\Traits\Conditionable;
+  13  use InvalidArgumentException;
+
+  16  {
+  17:     use Conditionable;
+  18  
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\ProhibitedIf.php:
+  11      /**
+  12:      * The condition that validates the attribute.
+  13       *
+
+  15       */
+  16:     public $condition;
+  17  
+  18      /**
+  19:      * Create a new prohibited validation rule based on a condition.
+  20       *
+  21:      * @param  (\Closure(): bool)|bool  $condition
+  22       *
+
+  24       */
+  25:     public function __construct($condition)
+  26      {
+  27:         if ($condition instanceof Closure || is_bool($condition)) {
+  28:             $this->condition = $condition;
+  29          } else {
+  30:             throw new InvalidArgumentException('The provided condition must be a callable or boolean.');
+  31          }
+
+  40      {
+  41:         if (is_callable($this->condition)) {
+  42:             return call_user_func($this->condition) ? 'prohibited' : '';
+  43          }
+  44  
+  45:         return $this->condition ? 'prohibited' : '';
+  46      }
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\RequiredIf.php:
+  11      /**
+  12:      * The condition that validates the attribute.
+  13       *
+
+  15       */
+  16:     public $condition;
+  17  
+  18      /**
+  19:      * Create a new required validation rule based on a condition.
+  20       *
+  21:      * @param  (\Closure(): bool)|bool|null  $condition
+  22       */
+  23:     public function __construct($condition)
+  24      {
+  25:         if (is_null($condition)) {
+  26:             $condition = false;
+  27          }
+  28  
+  29:         if ($condition instanceof Closure || is_bool($condition)) {
+  30:             $this->condition = $condition;
+  31          } else {
+  32:             throw new InvalidArgumentException('The provided condition must be a callable or boolean.');
+  33          }
+
+  42      {
+  43:         if (is_callable($this->condition)) {
+  44:             return call_user_func($this->condition) ? 'required' : '';
+  45          }
+  46  
+  47:         return $this->condition ? 'required' : '';
+  48      }
+
+Tel-U_Deals\vendor\illuminate\validation\Rules\Unique.php:
+   5  use Illuminate\Database\Eloquent\Model;
+   6: use Illuminate\Support\Traits\Conditionable;
+   7  use Stringable;
+
+  10  {
+  11:     use Conditionable, DatabaseRule;
+  12  
+
+Tel-U_Deals\vendor\illuminate\view\ComponentAttributeBag.php:
+   12  use Illuminate\Support\Str;
+   13: use Illuminate\Support\Traits\Conditionable;
+   14  use Illuminate\Support\Traits\InteractsWithData;
+
+   22  {
+   23:     use Conditionable, InteractsWithData, Macroable;
+   24  
+
+  204      /**
+  205:      * Conditionally merge classes into the attribute bag.
+  206       *
+
+  217      /**
+  218:      * Conditionally merge styles into the attribute bag.
+  219       *
+
+Tel-U_Deals\vendor\illuminate\view\Factory.php:
+  187      /**
+  188:      * Get the rendered content of the view based on a given condition.
+  189       *
+  190:      * @param  bool  $condition
+  191       * @param  string  $view
+
+  195       */
+  196:     public function renderWhen($condition, $view, $data = [], $mergeData = [])
+  197      {
+  198:         if (! $condition) {
+  199              return '';
+
+  205      /**
+  206:      * Get the rendered content of the view based on the negation of a given condition.
+  207       *
+  208:      * @param  bool  $condition
+  209       * @param  string  $view
+
+  213       */
+  214:     public function renderUnless($condition, $view, $data = [], $mergeData = [])
+  215      {
+  216:         return $this->renderWhen(! $condition, $view, $data, $mergeData);
+  217      }
+
+Tel-U_Deals\vendor\illuminate\view\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\illuminate\view\View.php:
+  107      /**
+  108:      * Get the evaluated contents of a given fragment if the given condition is true.
+  109       *
+
+  123      /**
+  124:      * Get the evaluated contents for a given array of fragments if the given condition is true.
+  125       *
+
+Tel-U_Deals\vendor\illuminate\view\Compilers\BladeCompiler.php:
+   22          Concerns\CompilesComponents,
+   23:         Concerns\CompilesConditionals,
+   24          Concerns\CompilesContexts,
+
+   57      /**
+   58:      * All custom "condition" handlers.
+   59       *
+
+   61       */
+   62:     protected $conditions = [];
+   63  
+
+  726      {
+  727:         $this->conditions[$name] = $callback;
+  728  
+
+  752      /**
+  753:      * Check the result of a condition.
+  754       *
+
+  760      {
+  761:         return call_user_func($this->conditions[$name], ...$parameters);
+  762      }
+
+Tel-U_Deals\vendor\illuminate\view\Compilers\Concerns\CompilesClasses.php:
+  7      /**
+  8:      * Compile the conditional class statement into valid PHP.
+  9       *
+
+Tel-U_Deals\vendor\illuminate\view\Compilers\Concerns\CompilesConditionals.php:
+    6  
+    7: trait CompilesConditionals
+    8  {
+
+  321       *
+  322:      * @param  bool  $condition
+  323       * @return string
+  324       */
+  325:     protected function compileBool($condition)
+  326      {
+  327:         return "<?php echo ($condition ? 'true' : 'false'); ?>";
+  328      }
+
+  332       *
+  333:      * @param  string  $condition
+  334       * @return string
+  335       */
+  336:     protected function compileChecked($condition)
+  337      {
+  338:         return "<?php if{$condition}: echo 'checked'; endif; ?>";
+  339      }
+
+  343       *
+  344:      * @param  string  $condition
+  345       * @return string
+  346       */
+  347:     protected function compileDisabled($condition)
+  348      {
+  349:         return "<?php if{$condition}: echo 'disabled'; endif; ?>";
+  350      }
+
+  354       *
+  355:      * @param  string  $condition
+  356       * @return string
+  357       */
+  358:     protected function compileRequired($condition)
+  359      {
+  360:         return "<?php if{$condition}: echo 'required'; endif; ?>";
+  361      }
+
+  365       *
+  366:      * @param  string  $condition
+  367       * @return string
+  368       */
+  369:     protected function compileReadonly($condition)
+  370      {
+  371:         return "<?php if{$condition}: echo 'readonly'; endif; ?>";
+  372      }
+
+  376       *
+  377:      * @param  string  $condition
+  378       * @return string
+  379       */
+  380:     protected function compileSelected($condition)
+  381      {
+  382:         return "<?php if{$condition}: echo 'selected'; endif; ?>";
+  383      }
+
+Tel-U_Deals\vendor\illuminate\view\Compilers\Concerns\CompilesStyles.php:
+  7      /**
+  8:      * Compile the conditional style statement into valid PHP.
+  9       *
+
+Tel-U_Deals\vendor\laravel\breeze\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\laravel\breeze\stubs\api\pest-tests\Pest.php:
+  22  |
+  23: | When you're writing tests, you often need to check that values meet certain conditions. The
+  24  | "expect()" function gives you access to a set of "expectations" methods that you can use
+
+Tel-U_Deals\vendor\laravel\breeze\stubs\default\pest-tests\Pest.php:
+  22  |
+  23: | When you're writing tests, you often need to check that values meet certain conditions. The
+  24  | "expect()" function gives you access to a set of "expectations" methods that you can use
+
+Tel-U_Deals\vendor\laravel\breeze\stubs\livewire-common\pest-tests\Pest.php:
+  22  |
+  23: | When you're writing tests, you often need to check that values meet certain conditions. The
+  24  | "expect()" function gives you access to a set of "expectations" methods that you can use
+
+Tel-U_Deals\vendor\laravel\prompts\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\laravel\prompts\src\FormBuilder.php:
+  35      /**
+  36:      * Add a new conditional step.
+  37       */
+  38:     public function addIf(Closure|bool $condition, Closure $step, ?string $name = null, bool $ignoreWhenReverting = false): self
+  39      {
+  40:         $this->steps[] = new FormStep($step, $condition, $name, $ignoreWhenReverting);
+  41  
+
+Tel-U_Deals\vendor\laravel\prompts\src\FormStep.php:
+   8  {
+   9:     protected readonly Closure $condition;
+  10  
+
+  12          protected readonly Closure $step,
+  13:         bool|Closure $condition,
+  14          public readonly ?string $name,
+
+  16      ) {
+  17:         $this->condition = is_bool($condition)
+  18:             ? fn () => $condition
+  19:             : $condition;
+  20      }
+
+  36      /**
+  37:      * Whether the step should run based on the given condition.
+  38       *
+
+  42      {
+  43:         return ($this->condition)($responses);
+  44      }
+
+Tel-U_Deals\vendor\laravel\prompts\src\Concerns\Fallback.php:
+  24       */
+  25:     public static function fallbackWhen(bool $condition): void
+  26      {
+  27:         static::$shouldFallback = $condition || static::$shouldFallback;
+  28      }
+
+Tel-U_Deals\vendor\midtrans\midtrans-php\LICENSE:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\nesbot\carbon\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\nesbot\carbon\src\Carbon\CarbonInterface.php:
+  3882       * instance is created.  The provided instance will be returned
+  3883:      * specifically under the following conditions:
+  3884       *   - A call to the static now() method, ex. Carbon::now()
+
+  3906       * instance is created.  The provided instance will be returned
+  3907:      * specifically under the following conditions:
+  3908       *   - A call to the static now() method, ex. Carbon::now()
+
+Tel-U_Deals\vendor\nesbot\carbon\src\Carbon\Factory.php:
+  554       * instance is created.  The provided instance will be returned
+  555:      * specifically under the following conditions:
+  556       *   - A call to the static now() method, ex. Carbon::now()
+
+  584       * instance is created.  The provided instance will be returned
+  585:      * specifically under the following conditions:
+  586       *   - A call to the static now() method, ex. Carbon::now()
+
+Tel-U_Deals\vendor\nesbot\carbon\src\Carbon\Traits\Test.php:
+  33       * instance is created.  The provided instance will be returned
+  34:      * specifically under the following conditions:
+  35       *   - A call to the static now() method, ex. Carbon::now()
+
+  60       * instance is created.  The provided instance will be returned
+  61:      * specifically under the following conditions:
+  62       *   - A call to the static now() method, ex. Carbon::now()
+
+Tel-U_Deals\vendor\nunomaduro\termwind\LICENSE.md:
+   9  copies of the Software, and to permit persons to whom the Software is
+  10: furnished to do so, subject to the following conditions:
+  11  
+
+Tel-U_Deals\vendor\psr\clock\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is
+  8: furnished to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\psr\container\LICENSE:
+  10  the Software, and to permit persons to whom the Software is furnished to do so,
+  11: subject to the following conditions:
+  12  
+
+Tel-U_Deals\vendor\psr\simple-cache\LICENSE.md:
+   9  > copies of the Software, and to permit persons to whom the Software is
+  10: > furnished to do so, subject to the following conditions:
+  11  >
+
+Tel-U_Deals\vendor\psr\simple-cache\src\CacheInterface.php:
+  102       * and not to be used within your live applications operations for get/set, as this method
+  103:      * is subject to a race condition where your has() will return true and immediately after,
+  104       * another script can remove it making the state of your app out of date.
+
+Tel-U_Deals\vendor\symfony\clock\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\console\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\console\Command\Command.php:
+  203       * Override this to check for x or y and return false if the command cannot
+  204:      * run properly under the current conditions.
+  205       */
+
+Tel-U_Deals\vendor\symfony\console\Logger\ConsoleLogger.php:
+  78  
+  79:         // the if condition check isn't necessary -- it's the same one that $output will do internally anyway.
+  80          // We only do it for efficiency here as the message formatting is relatively expensive.
+
+Tel-U_Deals\vendor\symfony\deprecation-contracts\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\finder\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\http-foundation\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\http-foundation\Response.php:
+    58      public const HTTP_LENGTH_REQUIRED = 411;
+    59:     public const HTTP_PRECONDITION_FAILED = 412;
+    60      public const HTTP_REQUEST_ENTITY_TOO_LARGE = 413;
+
+    71      public const HTTP_UPGRADE_REQUIRED = 426;                                            // RFC2817
+    72:     public const HTTP_PRECONDITION_REQUIRED = 428;                                       // RFC6585
+    73      public const HTTP_TOO_MANY_REQUESTS = 429;                                           // RFC6585
+
+   161          411 => 'Length Required',
+   162:         412 => 'Precondition Failed',
+   163          413 => 'Content Too Large',                                           // RFC-ietf-httpbis-semantics
+
+   174          426 => 'Upgrade Required',                                            // RFC2817
+   175:         428 => 'Precondition Required',                                       // RFC6585
+   176          429 => 'Too Many Requests',                                           // RFC6585
+
+   574       * Returns true if the response includes headers that can be used to validate
+   575:      * the response with the origin server using a conditional GET request.
+   576       *
+
+  1111       * Determines if the Response validators (ETag, Last-Modified) match
+  1112:      * a conditional value specified in the Request.
+  1113       *
+
+Tel-U_Deals\vendor\symfony\http-foundation\Session\Storage\Handler\PdoSessionHandler.php:
+   24   * different locking strategies to handle concurrent access to the same session.
+   25:  * Locking is necessary to prevent loss of data due to race conditions and to keep
+   26   * the session data consistent between read() and write(). With locking, requests
+
+   50       * No locking is done. This means sessions are prone to loss of data due to
+   51:      * race conditions of concurrent requests to the same session. The last session
+   52       * write will win in this case. It might be useful when you implement your own
+
+  858                  // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
+  859:                 // It also requires HOLDLOCK according to https://weblogs.sqlteam.com/dang/2009/01/31/upsert-race-condition-with-merge/
+  860                  $mergeSql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) ".
+
+Tel-U_Deals\vendor\symfony\mime\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\polyfill-ctype\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\polyfill-intl-grapheme\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\polyfill-intl-idn\Idn.php:
+  574          // Step 8. If CheckBidi, and if the domain name is a  Bidi domain name, then the label must
+  575:         // satisfy all six of the numbered conditions in [IDNA2008] RFC 5893, Section 2.
+  576          if ($options['CheckBidi'] && (!$info->bidiDomain || $info->validBidiDomain)) {
+
+  615  
+  616:             for ($k = self::BASE; /* no condition */; $k += self::BASE) {
+  617                  if ($in >= $inputLength) {
+
+  726  
+  727:                     for ($k = self::BASE; /* no condition */; $k += self::BASE) {
+  728                          if ($k <= $bias) {
+
+Tel-U_Deals\vendor\symfony\polyfill-intl-idn\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\polyfill-intl-normalizer\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\polyfill-mbstring\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\polyfill-php83\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\polyfill-php84\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\polyfill-php85\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\process\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\process\Process.php:
+  177       * Command-lines are parsed by the shell of your OS (/bin/sh on Unix-like, cmd.exe on Windows.)
+  178:      * This allows using e.g. pipes or conditional execution. In this mode, signals are sent to the
+  179       * shell wrapper and not to your commands.
+
+Tel-U_Deals\vendor\symfony\service-contracts\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\string\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\translation\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\symfony\translation-contracts\LICENSE:
+  7  copies of the Software, and to permit persons to whom the Software is furnished
+  8: to do so, subject to the following conditions:
+  9  
+
+Tel-U_Deals\vendor\voku\portable-ascii\CHANGELOG.md:
+  4  
+  5: - use modern phpdocs e.g. list<int> or conditional-return annotations 
+  6  
+
+Tel-U_Deals\vendor\voku\portable-ascii\LICENSE.txt:
+  7  copies of the Software, and to permit persons to whom the Software is
+  8: furnished to do so, subject to the following conditions:
+  9  

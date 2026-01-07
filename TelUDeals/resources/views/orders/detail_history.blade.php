@@ -26,12 +26,37 @@
                             <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Transaction ID</p>
                             <h2 class="text-xl font-black text-gray-800">{{ $order->order_id }}</h2>
                         </div>
-                        <div class="text-right">
-                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Status Pembayaran</p>
-                            <span class="font-black uppercase text-sm {{ $order->payment_status == 'paid' ? 'text-green-600' : 'text-red-600' }}">
-                                {{ $order->payment_status }}
-                            </span>
-                        </div>
+<div class="text-right space-y-1">
+    {{-- STATUS PEMBAYARAN --}}
+    <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+        Status Pembayaran
+    </p>
+                            @if($order->payment_status === 'paid')
+                                <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase">PAID</span>
+                            @else
+                                <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold uppercase">UNPAID</span>
+                            @endif
+
+    {{-- STATUS PESANAN --}}
+    <p class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mt-2">
+        Status Pesanan
+    </p>
+
+    @if($order->status === 'pending')
+        <span class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-bold uppercase">
+            Pending
+        </span>
+    @elseif($order->status === 'processing')
+        <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold uppercase">
+            Processing
+        </span>
+    @elseif($order->status === 'completed')
+        <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-bold uppercase">
+            Completed
+        </span>
+    @endif
+</div>
+
                     </div>
 
                     <div class="p-8">
@@ -60,6 +85,20 @@
                             <span class="font-black uppercase tracking-widest text-xs">Total Pembayaran</span>
                             <span class="text-2xl font-black italic tracking-tighter">Rp{{ number_format($order->total_price, 0, ',', '.') }}</span>
                         </div>
+                        @if($order->payment_status === 'unpaid' && $snapToken)
+                            <div class="mt-6 flex justify-end">
+                                <button
+                                    id="pay-button"
+                                    class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg">
+                                    💳 Bayar Sekarang
+                                </button>
+                            </div>
+                        @endif
+                        @if($order->payment_status === 'paid')
+                            <span class="inline-block bg-green-100 text-green-700 px-4 py-2 rounded-xl font-semibold">
+                                ✅ Sudah Dibayar
+                            </span>
+                        @endif
 
                         {{-- FORM RATING --}}
                         @if($order->user_id == Auth::id() && $order->payment_status == 'paid' && $order->reviews->count() == 0)
@@ -115,4 +154,27 @@
             </div>
         </div>
     </div>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ config('midtrans.client_key') }}">
+</script>
+@if($order->payment_status === 'unpaid' && $snapToken)
+<script>
+document.getElementById('pay-button').addEventListener('click', function () {
+    window.snap.pay('{{ $snapToken }}', {
+        onSuccess: function () {
+            window.location.href = "{{ route('orders.history') }}";
+        },
+        onPending: function () {
+            window.location.href = "{{ route('orders.history') }}";
+        },
+        onError: function () {
+            alert('Pembayaran gagal');
+        },
+        onClose: function () {
+            alert('Pembayaran dibatalkan');
+        }
+    });
+});
+</script>
+@endif
 </x-app-layout>

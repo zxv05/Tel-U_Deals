@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->decimal('latitude', 10, 7);
-            $table->decimal('longitude', 11, 7);
+            // $table->decimal('latitude', 10, 7);
+            // $table->decimal('longitude', 11, 7);
             $table->decimal('price', 10, 2)->nullable()->change(); 
         });
     }

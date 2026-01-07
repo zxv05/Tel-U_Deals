@@ -18,7 +18,8 @@ class Order extends Model
         'user_id',
         'total_price',
         'status',
-        'payment_status'
+        'payment_status',
+        'address_id',
     ];
 
     /**
@@ -53,4 +54,9 @@ class Order extends Model
     {
         return $this->hasMany(Review::class); // Tambahin ini buat nampung rating
     }
+    public function address()
+{
+    return $this->belongsTo(Address::class);
+}
+
 }
